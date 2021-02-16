@@ -6,7 +6,7 @@
 ## <a name="gen_usages"></a>General usage
 Map 10x scRNA-seq reads to the viral host reference set using STARsolo
 ```sh
-scvh_map_reads.pl -t num_threads -o output_dir vh_genome_dir R2.fastq.gz R1.fastq.gz
+perl scvh_map_reads.pl -t num_threads -o output_dir vh_genome_dir R2.fastq.gz R1.fastq.gz
 ```
 
 Filter the mapped UMIs using EmptyDrops to get the viral host filtered UMI counts matrix and also output viral genes and barcodes info files
