@@ -1,6 +1,6 @@
 ## <a name="require"></a>Requirements
 * Input: 10x Chromium scRNA-seq reads
-* STARsolo >= v2.7.5a
+* STAR >= v2.7.5a
 * DropletUtils >= v1.10.2
 
 ## <a name="gen_usages"></a>General usage
