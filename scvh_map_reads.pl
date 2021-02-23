@@ -198,7 +198,7 @@ sub run_STAR {
 	my $STAR_output_dir = $output_dir . "/STARsolo_outs/";
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
 	
-	my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM 10000000000 --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM 100000000000 --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
 
 	system("$run_STAR");
 	
