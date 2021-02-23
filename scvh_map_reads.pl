@@ -41,7 +41,7 @@ if ($barcodes_whitelist ne "\"vh_genome_dir\"/737K-august-2016.txt") {
 
 #params to be removed
 #definitely needed, can use static version for now, but eventually user should pre-install STAR
-my $STAR = "/contents/STAR-2.7.8a/bin/Linux_x86_64_static/STAR";
+my $STAR = "/content/STAR-2.7.8a/bin/Linux_x86_64_static/STAR";
 
 #not necessary unless analyze_BAM() is called, which currently it isn't
 my $samtools = "/home/asdfken/tools/samtools-1.10/samtools";
