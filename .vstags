@@ -1,0 +1,13 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+analyze_BAM	.\scvh_map_reads.pl	122;"	s
+check_genome_fasta_gtf_present	.\scvh_map_reads.pl	254;"	s
+die_usage	.\scvh_map_reads.pl	24;"	s
+get_reference_names_and_accessions	.\scvh_map_reads.pl	235;"	s
+index_STAR_genome_if_nec	.\scvh_map_reads.pl	208;"	s
+out_gene_to_accession_and_name	.\scvh_map_reads.pl	73;"	s
+run_STAR	.\scvh_map_reads.pl	181;"	s
