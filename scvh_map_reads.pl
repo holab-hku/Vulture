@@ -7,12 +7,16 @@ my $threads = 1;
 my $soloStrand = "Reverse"; #Reverse is used for 10x 5' protocol, while Forward is used for 10x 3' protocol
 my $genome_dir = "\"vh_genome_dir\"";
 my $barcodes_whitelist = "$genome_dir/737K-august-2016.txt";
+#definitely needed, can use static version for now, but eventually user should pre-install STAR
+my $STAR = "~/STAR-2.7.8a/bin/Linux_x86_64_static/STAR";
 
 GetOptions(
 	'o|output-dir=s' => \$output_dir,
 	't|threads=i' => \$threads,
 	's|soloStrand=s' => \$soloStrand,
 	'w|whitelist=s' => \$barcodes_whitelist,
+	'r|starPath=s' => \$STAR,
+
 ) or die_usage();
 
 die_usage() unless @ARGV == 3;
@@ -27,9 +31,11 @@ Usage: scvh_map_reads.pl [Options] <vh_genome_dir> <R2> <R1>
 
 Options:                                                                                                   Defaults
 -o/--output-dir	<string>  the output directory                                                             [./]
+-r/--starPath <string>   STARsolo path                                                					   [<$STAR>]
 -t/--threads <int>        number of threads to run STARsolo with                                           [$threads]
 -s/--soloStrand <string>  STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively  [$soloStrand]
 -w/--whitelist <string>   STARsolo param --soloCBwhitelist                                                 [<$barcodes_whitelist>]
+
 ";
 }
 
@@ -40,9 +46,6 @@ if ($barcodes_whitelist ne "\"vh_genome_dir\"/737K-august-2016.txt") {
 }
 
 #params to be removed
-#definitely needed, can use static version for now, but eventually user should pre-install STAR
-my $STAR = "~/STAR-2.7.8a/bin/Linux_x86_64_static/STAR";
-
 #not necessary unless analyze_BAM() is called, which currently it isn't
 my $samtools = "/home/asdfken/tools/samtools-1.10/samtools";
 
