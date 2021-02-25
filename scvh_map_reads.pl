@@ -19,7 +19,7 @@ GetOptions(
 
 ) or die_usage();
 
-die_usage() unless @ARGV == 3;
+die_usage() unless @ARGV >= 3;
 
 #my ($genome_dir, $R2, $R1) = @ARGV;
 $genome_dir = $ARGV[0];
