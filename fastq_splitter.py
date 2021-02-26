@@ -23,17 +23,20 @@ def split_reads(file_list):
     if len(file_list) == 2:
         file_one, file_two = file_list
         print(file_two)
+
+        file_one_name = file_one.split("/")[-1]
+        file_two_name = file_two_name.split("/")[-1]
+        name_lists = [file_one_name,file_two_name]
+
     else:
         file_one, file_two = file_list[0], None
 
     gzipped_file = False
     if file_one.endswith(".gz"):
         gzipped_file = True
-        file_one_name = file_one.split("/")[-1]
         output_prefix, suffix_extension = file_one_name[:-3].rsplit(".", 1)
     else:
 
-        file_one_name = file_one.split("/")[-1]
         output_prefix, suffix_extension = file_one.rsplit(".", 1)
 
     output_dir = TEMP_OUTPUT_FOLDER + "/processing_" + output_prefix
@@ -51,25 +54,25 @@ def split_reads(file_list):
     if parser_result.input_dir.startswith("s3://"):
         s3_bucket, key_prefix = parser_result.input_dir[5:].strip("/").split('/', 1)
 
-    split_file_names = []
-    for file_name in file_list:
+    split_file_names = file_list
+    # for file_name in file_list:
 
-        if parser_result.input_dir.startswith("s3://"):
-            print()
-            # s3_client = boto3.client("s3", region_name=parser_result.s3_region)
-            # try:
-            #     s3_client.download_file(s3_bucket, key_prefix + "/" + file_name, output_dir + "/" + file_name)
-            # except:
-            #     raise ValueError(s3_bucket + ":" + key_prefix + "/" + file_name, output_dir + "/" + file_name)
-        else:
-            print()
-            # try:
-            #     subprocess.call(["hdfs", "dfs", "-get", parser_result.input_dir.rstrip("/") + "/" + file_name,
-            #                      output_dir + "/" + file_name])
-            # except:
-            #     raise ValueError("Unable to retrieve file from HDFS: " + key_prefix + "/" + file_name)
+    #     if parser_result.input_dir.startswith("s3://"):
+    #         print()
+    #         # s3_client = boto3.client("s3", region_name=parser_result.s3_region)
+    #         # try:
+    #         #     s3_client.download_file(s3_bucket, key_prefix + "/" + file_name, output_dir + "/" + file_name)
+    #         # except:
+    #         #     raise ValueError(s3_bucket + ":" + key_prefix + "/" + file_name, output_dir + "/" + file_name)
+    #     else:
+    #         print()
+    #         # try:
+    #         #     subprocess.call(["hdfs", "dfs", "-get", parser_result.input_dir.rstrip("/") + "/" + file_name,
+    #         #                      output_dir + "/" + file_name])
+    #         # except:
+    #         #     raise ValueError("Unable to retrieve file from HDFS: " + key_prefix + "/" + file_name)
 
-        split_file_names.append(output_dir + "/" + file_name)
+    #     split_file_names.append(output_dir + "/" + file_name)
 
     file_part = 0
     output_name = "{}/{}_part{}.{}".format(output_dir, output_prefix, str(file_part), suffix_extension)
