@@ -59,11 +59,12 @@ def split_reads(file_list):
             # except:
             #     raise ValueError(s3_bucket + ":" + key_prefix + "/" + file_name, output_dir + "/" + file_name)
         else:
-            try:
-                subprocess.call(["hdfs", "dfs", "-get", parser_result.input_dir.rstrip("/") + "/" + file_name,
-                                 output_dir + "/" + file_name])
-            except:
-                raise ValueError("Unable to retrieve file from HDFS: " + key_prefix + "/" + file_name)
+            print()
+            # try:
+            #     subprocess.call(["hdfs", "dfs", "-get", parser_result.input_dir.rstrip("/") + "/" + file_name,
+            #                      output_dir + "/" + file_name])
+            # except:
+            #     raise ValueError("Unable to retrieve file from HDFS: " + key_prefix + "/" + file_name)
 
         split_file_names.append(output_dir + "/" + file_name)
 
@@ -158,7 +159,7 @@ def upload_split(file_name):
     #     subprocess.call(["hdfs", "dfs", "-mkdir", "-p", parser_result.output_dir])
     #     subprocess.call(["hdfs", "dfs", "-put", file_name, parser_result.output_dir])
 
-    print(base_file_name)
+    #print(base_file_name)
 
 
 if __name__ == "__main__":
