@@ -36,10 +36,12 @@ def split_reads(file_list):
     output_dir = TEMP_OUTPUT_FOLDER + "/processing_" + output_prefix
 
     try:
-        os.mkdir(output_dir)
+        os.makedirs(output_dir, exist_ok=True)
+
+        #os.mkdir(output_dir)
     except:
         shutil.rmtree(output_dir, ignore_errors=True)
-        os.mkdir(output_dir)
+        os.makedirs(output_dir, exist_ok=True)
         print('Output directory {} exist.'.format(output_dir), file=sys.stderr)
 
     # Download the file from s3
