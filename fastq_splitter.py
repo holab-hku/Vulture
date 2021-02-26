@@ -50,6 +50,7 @@ def split_reads(file_list):
     for file_name in file_list:
 
         if parser_result.input_dir.startswith("s3://"):
+            print()
             # s3_client = boto3.client("s3", region_name=parser_result.s3_region)
             # try:
             #     s3_client.download_file(s3_bucket, key_prefix + "/" + file_name, output_dir + "/" + file_name)
@@ -140,20 +141,20 @@ def split_reads(file_list):
 def upload_split(file_name):
     global parser_result
 
-    base_file_name = file_name.split("/")[-1]
+    # base_file_name = file_name.split("/")[-1]
 
-    if parser_result.output_dir.startswith("s3://"):
-        bucket_name, folder_name = parser_result.output_dir[5:].split("/", 1)
-        key_name = "{}/{}".format(folder_name.rstrip("/"), base_file_name)
+    # if parser_result.output_dir.startswith("s3://"):
+    #     bucket_name, folder_name = parser_result.output_dir[5:].split("/", 1)
+    #     key_name = "{}/{}".format(folder_name.rstrip("/"), base_file_name)
 
-        s3 = boto3.resource("s3", region_name=parser_result.s3_region)
-        s3.Bucket(bucket_name).upload_file(file_name, key_name)
+    #     s3 = boto3.resource("s3", region_name=parser_result.s3_region)
+    #     s3.Bucket(bucket_name).upload_file(file_name, key_name)
 
-        os.remove(file_name)
+    #     os.remove(file_name)
 
-    else:
-        subprocess.call(["hdfs", "dfs", "-mkdir", "-p", parser_result.output_dir])
-        subprocess.call(["hdfs", "dfs", "-put", file_name, parser_result.output_dir])
+    # else:
+    #     subprocess.call(["hdfs", "dfs", "-mkdir", "-p", parser_result.output_dir])
+    #     subprocess.call(["hdfs", "dfs", "-put", file_name, parser_result.output_dir])
 
     print(base_file_name)
 
