@@ -4,7 +4,7 @@ import io
 import gzip
 import subprocess
 import os
-import boto3
+#import boto3
 import argparse
 import sys
 import shutil
@@ -50,11 +50,11 @@ def split_reads(file_list):
     for file_name in file_list:
 
         if parser_result.input_dir.startswith("s3://"):
-            s3_client = boto3.client("s3", region_name=parser_result.s3_region)
-            try:
-                s3_client.download_file(s3_bucket, key_prefix + "/" + file_name, output_dir + "/" + file_name)
-            except:
-                raise ValueError(s3_bucket + ":" + key_prefix + "/" + file_name, output_dir + "/" + file_name)
+            # s3_client = boto3.client("s3", region_name=parser_result.s3_region)
+            # try:
+            #     s3_client.download_file(s3_bucket, key_prefix + "/" + file_name, output_dir + "/" + file_name)
+            # except:
+            #     raise ValueError(s3_bucket + ":" + key_prefix + "/" + file_name, output_dir + "/" + file_name)
         else:
             try:
                 subprocess.call(["hdfs", "dfs", "-get", parser_result.input_dir.rstrip("/") + "/" + file_name,
@@ -131,9 +131,9 @@ def split_reads(file_list):
         output_writer.close()
         subprocess.call(["gzip", "-f", "--fast", output_name])
 
-        upload_split(output_name_gzip)
+        #upload_split(output_name_gzip)
 
-    shutil.rmtree(output_dir, ignore_errors=True)
+    #shutil.rmtree(output_dir, ignore_errors=True)
     return "Success"
 
 
