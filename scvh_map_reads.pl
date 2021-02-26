@@ -37,7 +37,7 @@ Options:                                                                        
 -t/--threads <int>        number of threads to run STARsolo with                                           [$threads]
 -s/--soloStrand <string>  STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively  [$soloStrand]
 -w/--whitelist <string>   STARsolo param --soloCBwhitelist                                                 [<$barcodes_whitelist>]
--r/--ram <int>            STARsolo param: limitGenomeGenerateRAM                                                	   [<$STAR>]
+-r/--ram <int>            STARsolo param: limitGenomeGenerateRAM unit by GB                                [<$ram>]
 
 ";
 }
@@ -51,6 +51,7 @@ if ($barcodes_whitelist ne "\"vh_genome_dir\"/737K-august-2016.txt") {
 #params to be removed
 #not necessary unless analyze_BAM() is called, which currently it isn't
 my $samtools = "/home/asdfken/tools/samtools-1.10/samtools";
+$ram = $ram * 1073741274
 
 #params not planned to be user options (for now)
 my $host_species = "human";
