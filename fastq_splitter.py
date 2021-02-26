@@ -22,6 +22,7 @@ def split_reads(file_list):
 
     if len(file_list) == 2:
         file_one, file_two = file_list
+        print(file_two)
     else:
         file_one, file_two = file_list[0], None
 
@@ -167,7 +168,10 @@ if __name__ == "__main__":
     parser_result = parser.parse_args()
 
     parser_result.output_dir = parser_result.output_dir.strip().rstrip("/")
+    file_list = parser_result.input_dir.strip().split(",")
 
-    for line in sys.stdin:
-        file_list = line.strip().split()
-        split_reads(file_list)
+    print(file_list)
+    split_reads(file_list)
+    # for line in sys.stdin:
+    #     file_list = line.strip().split()
+    #     split_reads(file_list)
