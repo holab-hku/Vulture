@@ -9,13 +9,15 @@ my $genome_dir = "\"vh_genome_dir\"";
 my $barcodes_whitelist = "$genome_dir/737K-august-2016.txt";
 #definitely needed, can use static version for now, but eventually user should pre-install STAR
 my $STAR = "~/STAR-2.7.8a/bin/Linux_x86_64_static/STAR";
+my $ram = 0;
 
 GetOptions(
 	'o|output-dir=s' => \$output_dir,
 	't|threads=i' => \$threads,
+	'r|ram=i' => \$ram,
 	's|soloStrand=s' => \$soloStrand,
 	'w|whitelist=s' => \$barcodes_whitelist,
-	'r|starPath=s' => \$STAR,
+	'p|starPath=s' => \$STAR,
 
 ) or die_usage();
 
@@ -31,10 +33,11 @@ Usage: scvh_map_reads.pl [Options] <vh_genome_dir> <R2> <R1>
 
 Options:                                                                                                   Defaults
 -o/--output-dir	<string>  the output directory                                                             [./]
--r/--starPath <string>   STARsolo path                                                					   [<$STAR>]
+-p/--starPath <string>   STARsolo path                                                					   [<$STAR>]
 -t/--threads <int>        number of threads to run STARsolo with                                           [$threads]
 -s/--soloStrand <string>  STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively  [$soloStrand]
 -w/--whitelist <string>   STARsolo param --soloCBwhitelist                                                 [<$barcodes_whitelist>]
+-r/--ram <int>            STARsolo param: limitGenomeGenerateRAM                                                	   [<$STAR>]
 
 ";
 }
@@ -201,8 +204,8 @@ sub run_STAR {
 	my $STAR_output_dir = $output_dir . "/STARsolo_outs/";
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
 	
-	my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
-	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM 100000000000 --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
 
 	system("$run_STAR");
 	
