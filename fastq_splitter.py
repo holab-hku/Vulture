@@ -29,8 +29,11 @@ def split_reads(file_list):
     gzipped_file = False
     if file_one.endswith(".gz"):
         gzipped_file = True
-        output_prefix, suffix_extension = file_one[:-3].rsplit(".", 1)
+        file_one_name = file_one.split("/")[-1]
+        output_prefix, suffix_extension = file_one_name[:-3].rsplit(".", 1)
     else:
+
+        file_one_name = file_one.split("/")[-1]
         output_prefix, suffix_extension = file_one.rsplit(".", 1)
 
     output_dir = TEMP_OUTPUT_FOLDER + "/processing_" + output_prefix
