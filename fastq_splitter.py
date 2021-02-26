@@ -14,7 +14,7 @@ max_split_size = 1024 * 10 # 10G
 record_separator = "\t"
 pair_separator = "\t"
 
-TEMP_OUTPUT_FOLDER = "~/temp/output"
+TEMP_OUTPUT_FOLDER = "/home/junyichen/temp/output"
 
 
 def split_reads(file_list):
