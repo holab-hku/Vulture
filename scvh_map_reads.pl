@@ -51,7 +51,7 @@ if ($barcodes_whitelist ne "\"vh_genome_dir\"/737K-august-2016.txt") {
 #params to be removed
 #not necessary unless analyze_BAM() is called, which currently it isn't
 my $samtools = "/home/asdfken/tools/samtools-1.10/samtools";
-$ram = $ram * 1073741274
+$ram = $ram * 1073741274;
 
 #params not planned to be user options (for now)
 my $host_species = "human";
