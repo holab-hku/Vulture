@@ -25,7 +25,7 @@ def split_reads(file_list):
         print(file_two)
 
         file_one_name = file_one.split("/")[-1]
-        file_two_name = file_two_name.split("/")[-1]
+        file_two_name = file_two.split("/")[-1]
         name_lists = [file_one_name,file_two_name]
 
     else:
