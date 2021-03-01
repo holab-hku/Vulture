@@ -103,7 +103,7 @@ def split_reads_10x(file_list):
 
                 output_writer_1.close()
                 #subprocess.call(["gzip", "-f", "--fast", output_name_1])
-                subprocess.Popen(["gzip", "-f", "--fast", output_name_2])
+                subprocess.Popen(["gzip", "-f", "--fast", output_name_1])
 
                 # If there is still more record to process, open a new file to write to
                 if file_r2_reader.buffer.peek(10):
