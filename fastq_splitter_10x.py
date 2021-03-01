@@ -140,16 +140,21 @@ def split_reads_10x(file_list):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='File splitter for spark-based RNA-seq Pipeline')
     parser.add_argument('--input', '-i', action="store", dest="input_dir",
-                        help="Input location (S3 bucket)")
+                        help="Input location (S3 bucket)", required=True)
     parser.add_argument('--output', '-o', action="store", dest="output_dir", help="output location", required=True)
     parser.add_argument('--region', '-r', action="store", dest="s3_region", help="Region for S3 bucket",
                         nargs="?", default="us-east-1")
+    parser.add_argument('--size', '-s', action="store", dest="split_size", help="Split size of each file (GigaByte)", type=int,
+                        nargs="?", default=10)   
     parser_result = parser.parse_args()
 
     TEMP_OUTPUT_FOLDER = parser_result.output_dir
 
     parser_result.output_dir = parser_result.output_dir.strip().rstrip("/")
     file_list = parser_result.input_dir.strip().split(",")
+
+    max_split_size = parser_result.split_size * 1024
+
 
     print(file_list)
     split_reads_10x(file_list)
