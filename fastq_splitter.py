@@ -26,10 +26,11 @@ def split_reads(file_list):
 
         file_one_name = file_one.split("/")[-1]
         file_two_name = file_two.split("/")[-1]
-        name_lists = [file_one_name,file_two_name]
+        #name_lists = [file_one_name,file_two_name]
 
     else:
         file_one, file_two = file_list[0], None
+        file_one_name = file_one.split("/")[-1]
 
     gzipped_file = False
     if file_one.endswith(".gz"):
