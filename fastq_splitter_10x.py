@@ -98,10 +98,12 @@ def split_reads_10x(file_list):
             if output_writer_2.tell() > (max_split_size * 1024 * 1024):
 
                 output_writer_2.close()
-                subprocess.call(["gzip", "-f", "--fast", output_name_2])
+                #subprocess.call(["gzip", "-f", "--fast", output_name_2])
+                subprocess.Popen(["gzip", "-f", "--fast", output_name_2])
 
                 output_writer_1.close()
-                subprocess.call(["gzip", "-f", "--fast", output_name_1])
+                #subprocess.call(["gzip", "-f", "--fast", output_name_1])
+                subprocess.Popen(["gzip", "-f", "--fast", output_name_2])
 
                 # If there is still more record to process, open a new file to write to
                 if file_r2_reader.buffer.peek(10):
@@ -127,11 +129,11 @@ def split_reads_10x(file_list):
 
         output_writer_2.write(record_output_2)
         output_writer_2.close()
-        subprocess.call(["gzip", "-f", "--fast", output_name_2])
+        subprocess.Popen(["gzip", "-f", "--fast", output_name_2])
 
         output_writer_1.write(record_output_1)
         output_writer_1.close()
-        subprocess.call(["gzip", "-f", "--fast", output_name_1])
+        subprocess.Popen(["gzip", "-f", "--fast", output_name_1])
 
     return "Success"
 
@@ -143,6 +145,8 @@ if __name__ == "__main__":
     parser.add_argument('--region', '-r', action="store", dest="s3_region", help="Region for S3 bucket",
                         nargs="?", default="us-east-1")
     parser_result = parser.parse_args()
+
+    TEMP_OUTPUT_FOLDER = parser_result.output_dir
 
     parser_result.output_dir = parser_result.output_dir.strip().rstrip("/")
     file_list = parser_result.input_dir.strip().split(",")
