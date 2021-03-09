@@ -2,3 +2,4 @@
 *.output
 output/*
 .ipynb_checkpoints/
+data/
