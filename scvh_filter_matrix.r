@@ -135,6 +135,8 @@ print_viral_gene_UMIs_and_barcode_UMIs <- function(matrix_viral, matrix_human, s
 			write.table(viral_UMIs_table, paste0(out_dir,"/",sample_name_tag,set,"_matrix_viral_",element,"_info.txt"), quote=F, row.names=F, sep = "\t")
 			
 		} else if (element == "barcodes") {
+			# Fix bug by JY 2021 0309
+			viral_UMIs_table[is.na(viral_UMIs_table)]<-"unkown"
 			out_matrix_viral <- matrix_viral[viral_UMIs_table$gene,names(viral_UMIs), drop = FALSE]
 			out_matrix_viral <- as.data.frame(as.matrix(t(out_matrix_viral)))
 			colnames(out_matrix_viral) <- viral_UMIs_table$accession
