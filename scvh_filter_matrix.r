@@ -14,7 +14,7 @@ if (length(args)==0) {
 }
 
 #filter for lowest total UMI count per cell
-lower <- 200
+lower <- 100
 
 host_gene_id_prefix <- "ENSG"
 
