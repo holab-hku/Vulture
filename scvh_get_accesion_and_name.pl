@@ -12,7 +12,6 @@ my $ram = 0;
 
 GetOptions(
 	'o|output-dir=s' => \$output_dir,
-	't|threads=i' => \$threads,
 	'r|ram=i' => \$ram,
 	's|soloStrand=s' => \$soloStrand,
 	'w|whitelist=s' => \$barcodes_whitelist,
@@ -33,7 +32,6 @@ Usage: scvh_map_reads.pl [Options] <vh_genome_dir> <R2> <R1>
 Options:                                                                                                   Defaults
 -o/--output-dir	<string>  the output directory                                                             [./]
 -p/--starPath <string>   STARsolo path                                                					   [<$STAR>]
--t/--threads <int>        number of threads to run STARsolo with                                           [$threads]
 -s/--soloStrand <string>  STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively  [$soloStrand]
 -w/--whitelist <string>   STARsolo param --soloCBwhitelist                                                 [<$barcodes_whitelist>]
 -r/--ram <int>            STARsolo param: limitGenomeGenerateRAM unit by GB                                [<$ram>]
