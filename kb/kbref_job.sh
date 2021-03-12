@@ -5,4 +5,4 @@ echo output path $3;
 kb ref \
 -i=$3 \
 -g=$3 \
-$1 $2
+-f1=$1 $2
