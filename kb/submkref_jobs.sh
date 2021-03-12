@@ -1,4 +1,8 @@
 #!/bin/bash
+if [ "$#" -ne 2 ] || ! [ -d "$1" ] || ! [ -d "$2" ]; then
+  echo "Usage: $0 <Fasta_directory> <output_directory>" >&2
+  exit 1
+fi
 timestamp=$(date +%m%d%Y%H%M)
 fastapath=$1
 outpath=$2
