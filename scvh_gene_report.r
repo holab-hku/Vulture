@@ -34,7 +34,7 @@ check_dirs_files_exist <- function(output_dir) {
 	}
 	
 	STARsolo_dir_name <- "STARsolo_outs"
-	STARsolo_path_to_raw_matrix <- "Solo.out/Gene/filtered_feature_bc_matrix"
+	STARsolo_path_to_raw_matrix <- "Solo.out/Gene/filtered"
 	STARsolo_path_to_raw_matrix_path <- paste0(output_dir,"/",STARsolo_dir_name,"/",STARsolo_path_to_raw_matrix)
 	
 	if (dir.exists(paste0(output_dir,"/",STARsolo_dir_name)) == FALSE) {
