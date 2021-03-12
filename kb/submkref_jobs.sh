@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 3 ]; then
   echo "Usage: $0 <Fasta_directory> <output_directory>" >&2
   exit 1
 fi
