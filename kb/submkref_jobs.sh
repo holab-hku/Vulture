@@ -8,4 +8,4 @@ timestamp=$(date +%m%d%Y%H%M);
 fastapath=$1;
 outpath=$2;
 #rm -r human_host_viruses.viruSITE.with_hg38
-nohup /usr/bin/time -v ./kbref_job.sh $fastapath $outpath > output/kbref_$timestamp.out 2>&1
+nohup /usr/bin/time -v ./kbref_job.sh $fastapath $outpath > ../output/kbref_$timestamp.out 2>&1
