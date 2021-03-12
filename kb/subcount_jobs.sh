@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ "$#" -ne 6 ]; then
   echo "$#";
-  echo "Usage: $0 <Fastq_R1_directory> <Fastq_R2_directory> <KBref_directory> <KBref_directory> <Output_directory> <threads> <RAM>" >&2
+  echo "Usage: $0 <Fastq_R1_directory> <Fastq_R2_directory> <KBref_directory> <Output_directory> <threads> <RAM>" >&2
   exit 1
 fi
 timestamp=$(date +%m%d%Y%H%M);
