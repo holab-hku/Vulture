@@ -6,4 +6,4 @@ if [ "$#" -ne 6 ]; then
 fi
 timestamp=$(date +%m%d%Y%H%M);
 #rm -r human_host_viruses.viruSITE.with_hg38
-nohup /usr/bin/time -v ./kbcount_job.sh $1 $2 $3 $4 $5 $6 > ../output/kbcount_$timestamp.out 2>&1
+nohup /usr/bin/time -v ./kbcount_job.sh $1 $2 $3 $4 $5 $6 > ./output/kbcount_$timestamp.out 2>&1
