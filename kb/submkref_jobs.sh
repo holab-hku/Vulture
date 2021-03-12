@@ -10,4 +10,4 @@ gtfpath=$2;
 outpath=$3;
 
 #rm -r human_host_viruses.viruSITE.with_hg38
-nohup /usr/bin/time -v ./kbref_job.sh $fastapath $gtfapath $outpath > ../output/kbref_$timestamp.out 2>&1
+nohup /usr/bin/time -v ./kbref_job.sh $fastapath $gtfpath $outpath > ../output/kbref_$timestamp.out 2>&1
