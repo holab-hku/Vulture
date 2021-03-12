@@ -6,7 +6,7 @@ echo output path $4;
 echo threads $5;
 echo RAM $6;
 kb count \
--x=10XV3 \
+-x=10XV2 \
 -g=$3/transcripts_to_genes.txt \
 -i=$3/transcriptome.idx \
 -o=$3 \
