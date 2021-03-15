@@ -19,9 +19,9 @@ echo $3;
 mkdir -p $1/STARsolo_outs/Solo.out/Gene/raw
 mkdir -p $1/STARsolo_outs/Solo.out/Gene/filtered
 
-cp $3/outs/counts_unfiltered/cells_x_genes.barcodes.txt $1/STARsolo_outs/Solo.out/Gene/raw/barcodes.tsv;
-cp $3/outs/counts_unfiltered/cells_x_genes.genes.txt $1/STARsolo_outs/Solo.out/Gene/raw/genes.tsv;
-cp $3/outs/counts_unfiltered/cells_x_genes.mtx $1/STARsolo_outs/Solo.out/Gene/raw/matrix.mtx;
+cp $3/counts_unfiltered/cells_x_genes.barcodes.txt $1/STARsolo_outs/Solo.out/Gene/raw/barcodes.tsv;
+cp $3/counts_unfiltered/cells_x_genes.genes.txt $1/STARsolo_outs/Solo.out/Gene/raw/genes.tsv;
+cp $3/counts_unfiltered/cells_x_genes.mtx $1/STARsolo_outs/Solo.out/Gene/raw/matrix.mtx;
 cp -r $2 $1
 
 

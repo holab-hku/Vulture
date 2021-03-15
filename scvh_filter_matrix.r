@@ -59,7 +59,7 @@ gzip_command <- paste0("gzip -r ",STARsolo_raw_matrix)
 system(gzip_command)
 
 #read 10x data as SingleCellExperiment
-raw_SCE <- read10xCounts(paste0(STARsolo_raw_matrix), version = "3")
+raw_SCE <- read10xCounts(paste0(STARsolo_raw_matrix), version = "auto")
 
 raw_matrix <- counts(raw_SCE)
 colnames(raw_matrix) <- raw_SCE@colData@listData$Barcode
