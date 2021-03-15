@@ -9,7 +9,9 @@ kb count \
 -x=10XV2 \
 -g=$3/transcripts_to_genes.txt \
 -i=$3/transcriptome.idx \
--o=$3 \
+-o=$4 \
 -t=$5 \
 -m=$6 \
+--tmp=$4/kbtmp \
+--h5ad \
 $1 $2
