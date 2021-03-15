@@ -14,5 +14,4 @@ kb count \
 -m=$6 \
 --tmp=$4/kbtmp \
 --h5ad \
---loom \
 $1 $2
