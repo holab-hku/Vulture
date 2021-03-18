@@ -3,19 +3,10 @@ use strict; use warnings;
 use Getopt::Long qw(GetOptions);
 
 my $output_dir = ".";
-my $soloStrand = "Reverse"; #Reverse is used for 10x 5' protocol, while Forward is used for 10x 3' protocol
 my $genome_dir = "\"vh_genome_dir\"";
-my $barcodes_whitelist = "$genome_dir/737K-august-2016.txt";
-#definitely needed, can use static version for now, but eventually user should pre-install STAR
-my $STAR = "~/STAR-2.7.8a/bin/Linux_x86_64_static/STAR";
-my $ram = 0;
 
 GetOptions(
-	'o|output-dir=s' => \$output_dir,
-	'r|ram=i' => \$ram,
-	's|soloStrand=s' => \$soloStrand,
-	'w|whitelist=s' => \$barcodes_whitelist,
-	'p|starPath=s' => \$STAR,
+	'o|output-dir=s' => \$output_dir
 
 ) or die_usage();
 
@@ -23,7 +14,6 @@ die_usage() unless @ARGV == 1;
 
 #my ($genome_dir, $R2, $R1) = @ARGV;
 $genome_dir = $ARGV[0];
-my ($R2, $R1) = ($ARGV[1], $ARGV[2]);
 
 sub die_usage {
 die "
@@ -31,11 +21,6 @@ Usage: scvh_map_reads.pl [Options] <vh_genome_dir> <R2> <R1>
 
 Options:                                                                                                   Defaults
 -o/--output-dir	<string>  the output directory                                                             [./]
--p/--starPath <string>   STARsolo path                                                					   [<$STAR>]
--s/--soloStrand <string>  STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively  [$soloStrand]
--w/--whitelist <string>   STARsolo param --soloCBwhitelist                                                 [<$barcodes_whitelist>]
--r/--ram <int>            STARsolo param: limitGenomeGenerateRAM unit by GB                                [<$ram>]
-
 ";
 }
 
