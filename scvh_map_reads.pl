@@ -56,7 +56,10 @@ if ($barcodes_whitelist ne "\"vh_genome_dir\"/737K-august-2016.txt") {
 #params to be removed
 #not necessary unless analyze_BAM() is called, which currently it isn't
 my $samtools = "/home/asdfken/tools/samtools-1.10/samtools";
-$ram = $ram * 1073741274;
+
+if ($alignment eq "STAR") {
+	$ram = $ram * 1073741274;
+}
 
 #params not planned to be user options (for now)
 my $host_species = "human";
@@ -258,16 +261,16 @@ sub KBref_if_nec {
 	
 	my $index_KB = "F";
 	
-	for my $STAR_index_file (@KB_index_files) {
-		if (-e "$genome_dir/$KB_index_files") {
-			if (-s "$genome_dir/$KB_index_files") {
+	for my $KB_index_file (@KB_index_files) {
+		if (-e "$genome_dir/$KB_index_file") {
+			if (-s "$genome_dir/$KB_index_file") {
 			} else {
-				print "$genome_dir/$KB_index_files exists but is empty, will index KB genome\n";
+				print "$genome_dir/$KB_index_file exists but is empty, will index KB genome\n";
 				$index_KB = "T";
 				last;
 			}
 		} else {
-			print "Can't find $genome_dir/$KB_index_files, will index KB genome\n";
+			print "Can't find $genome_dir/$KB_index_file, will index KB genome\n";
 			$index_KB = "T";
 			last;
 		}
