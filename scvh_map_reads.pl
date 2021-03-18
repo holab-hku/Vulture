@@ -9,7 +9,9 @@ my $genome_dir = "\"vh_genome_dir\"";
 my $barcodes_whitelist = "$genome_dir/737K-august-2016.txt";
 #definitely needed, can use static version for now, but eventually user should pre-install STAR
 my $STAR = "~/STAR-2.7.8a/bin/Linux_x86_64_static/STAR";
-my $ram = 0;
+my $ram = 8;
+my $alignment = "STAR";
+my $technology = "10XV2";
 
 GetOptions(
 	'o|output-dir=s' => \$output_dir,
@@ -18,6 +20,8 @@ GetOptions(
 	's|soloStrand=s' => \$soloStrand,
 	'w|whitelist=s' => \$barcodes_whitelist,
 	'p|starPath=s' => \$STAR,
+	'a|alignment=s' => \$alignment,
+	'x|technology=s' => \$technology,
 
 ) or die_usage();
 
@@ -38,7 +42,8 @@ Options:                                                                        
 -s/--soloStrand <string>  STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively  [$soloStrand]
 -w/--whitelist <string>   STARsolo param --soloCBwhitelist                                                 [<$barcodes_whitelist>]
 -r/--ram <int>            STARsolo param: limitGenomeGenerateRAM unit by GB                                [<$ram>]
-
+-a/--alignment <string>   Select alignment methods: 'STAR', 'KB', or 'CellRanger'                          [<$alignment>]
+-v/--technology <string>  KB param:  Single-cell technology used (`kb --list` to view)                     [<$technology>]
 ";
 }
 
@@ -61,6 +66,8 @@ my $virus_database = "viruSITE";
 my $use_removed_amb_viral_exon = "T";
 my $removed_amb_viral_exon_tag = "removed_amb_viral_exon";
 my @STAR_index_files = qw(SAindex SA Genome genomeParameters.txt chrStart.txt chrNameLength.txt chrName.txt chrLength.txt); #as of v2.7.5a
+my @KB_index_files = qw(transcriptome.idx cdna.fa transcripts_to_genes.txt); #as of v2.7.5a
+
 my $soloUMIfiltering = "-";
 my $max_multi = 20;
 my $soloCellFilter = "None";
@@ -74,8 +81,15 @@ my %acc_to_name;
 my ($fa, $gtf) = check_genome_fasta_gtf_present();
 get_reference_names_and_accessions();
 out_gene_to_accession_and_name();
-index_STAR_genome_if_nec();
-run_STAR();
+
+if ($alignment eq "STAR") {
+	index_STAR_genome_if_nec();
+	run_STAR();
+}elsif ($alignment eq "KB") {
+	KBref_if_nec();
+	run_KB();
+}
+
 
 sub out_gene_to_accession_and_name {
 	my $intermediate_output_dir = "$output_dir/intermediate_files";
@@ -202,7 +216,7 @@ sub run_STAR {
 		$readFilesCommand = "-";
 	}
 	
-	my $STAR_output_dir = $output_dir . "/STARsolo_outs/";
+	my $STAR_output_dir = $output_dir . "/alignment_outs/";
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
 	
 	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
@@ -238,6 +252,67 @@ sub index_STAR_genome_if_nec {
 		my $generate_genome = "$STAR --runThreadN $threads --runMode genomeGenerate --genomeDir $genome_dir --genomeFastaFiles $fa";
 		system("$generate_genome");
 	}
+}
+
+sub KBref_if_nec {
+	
+	my $index_KB = "F";
+	
+	for my $STAR_index_file (@KB_index_files) {
+		if (-e "$genome_dir/$KB_index_files") {
+			if (-s "$genome_dir/$KB_index_files") {
+			} else {
+				print "$genome_dir/$KB_index_files exists but is empty, will index KB genome\n";
+				$index_KB = "T";
+				last;
+			}
+		} else {
+			print "Can't find $genome_dir/$KB_index_files, will index KB genome\n";
+			$index_KB = "T";
+			last;
+		}
+	}
+	
+	if ($index_KB eq "F") {
+		print "KB genome index files all found, will proceed with the existing index\n";
+	} elsif ($index_KB eq "T") {
+		my $generate_genome = "kb ref -i $genome_dir/transcriptome.idx -g $genome_dir/transcripts_to_genes.txt -f1=$genome_dir/cdna.fa $fa $gtf";
+		system("$generate_genome");
+	}
+}
+sub run_KB {
+	
+	for my $R ($R2, $R1) {
+		unless ( (-e $R) && (-s $R) ) {
+			die "$R is not present or is empty\n";
+		}
+	}
+	
+	my $readFilesCommand;
+	
+	if ( ($R2 =~ /.*\.gz$/) && ($R1 =~ /.*\.gz$/) ) {
+		$readFilesCommand = "zcat";
+	} else {
+		print ".gz not detected in file suffix of both R1 and R2, will assume both are uncompressed.\n";
+		$readFilesCommand = "-";
+	}
+	
+	my $STAR_output_dir = $output_dir . "/alignment_outs/";
+	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
+	
+	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	my $run_KBcount = "kb count -x=$technology -g=$genome_dir/transcripts_to_genes.txt -i=$genome_dir/transcriptome.idx -o=$output_dir -t=$threads -m=$ram --tmp=$output_dir/kbtemp --h5ad $R1 $R2";
+
+	system("$run_KBcount");
+	
+	#analyze_BAM($STAR_output_dir);
+}
+sub convert_h5ad_to_10x {
+	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	my $run_convert = "python kb/h5adto10x.py -i $output_dir/counts_unfiltered/adata.h5ad -o $output_dir/alignment_outs/Solo.out/Gene/raw -v $technology";
+	system("$run_convert");
+	
+	#analyze_BAM($STAR_output_dir);
 }
 
 sub get_reference_names_and_accessions {

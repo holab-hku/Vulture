@@ -7,7 +7,7 @@ import logging
 
 def run_main(args):
     # Read h5ad files
-    gene_name_dict={"v2":"genes.tsv","v3":"features.tsv"}
+    gene_name_dict={"10XV2":"genes.tsv","10XV3":"features.tsv"}
     try:
         adata = sc.read_h5ad(args.input)
     except:
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convser h5ad AnnData file to 10x mtx files.')
     parser.add_argument('--input','-i', type=str, help='an integer for the accumulator')
     parser.add_argument('--output', '-o',  type=str,  help='An output folder')
-    parser.add_argument('--chemistry', '-v',  type=str,default="v2",  help='10x chemistry vesion')
+    parser.add_argument('--chemistry', '-v',  type=str,default="10XV2",  help='10x chemistry vesion')
 
     args, unknown = parser.parse_known_args()
     run_main(args)

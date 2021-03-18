@@ -33,7 +33,7 @@ check_dirs_files_exist <- function(output_dir) {
 		stop(paste0("Can't find ",gene_to_accession_and_name_path,", please run ",scvh_map_reads_script_name))
 	}
 	
-	STARsolo_dir_name <- "STARsolo_outs"
+	STARsolo_dir_name <- "alignment_outs"
 	STARsolo_path_to_raw_matrix <- "Solo.out/Gene/raw"
 	STARsolo_path_to_raw_matrix_path <- paste0(output_dir,"/",STARsolo_dir_name,"/",STARsolo_path_to_raw_matrix)
 	
