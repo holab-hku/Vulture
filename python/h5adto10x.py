@@ -23,9 +23,9 @@ def run_main(args):
         logging.error("Cannot make output path:" + args.output)
 
     #Write matrix 
-    io.mmwrite(args.output+"\\matrix.mtx",adata.X.T.astype("int"))
-    barcodes.to_csv(args.output+"\\barcodes.tsv",sep="\t",header=None)
-    genes.to_csv(args.output+"\\"+gene_name_dict[args.chemistry],sep="\t",header=None)
+    io.mmwrite(args.output+"/matrix.mtx",adata.X.T.astype("int"))
+    barcodes.to_csv(args.output+"/barcodes.tsv",sep="\t",header=None)
+    genes.to_csv(args.output+"/"+gene_name_dict[args.chemistry],sep="\t",header=None)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convser h5ad AnnData file to 10x mtx files.')

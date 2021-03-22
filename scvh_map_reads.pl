@@ -91,6 +91,7 @@ if ($alignment eq "STAR") {
 }elsif ($alignment eq "KB") {
 	KBref_if_nec();
 	run_KB();
+	convert_h5ad_to_10x();
 }
 
 
