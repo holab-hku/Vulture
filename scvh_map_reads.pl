@@ -312,7 +312,7 @@ sub run_KB {
 }
 sub convert_h5ad_to_10x {
 	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
-	my $run_convert = "python kb/h5adto10x.py -i $output_dir/counts_unfiltered/adata.h5ad -o $output_dir/alignment_outs/Solo.out/Gene/raw -v $technology";
+	my $run_convert = "python python/h5adto10x.py -i $output_dir/counts_unfiltered/adata.h5ad -o $output_dir/alignment_outs/Solo.out/Gene/raw -v $technology";
 	system("$run_convert");
 	
 	#analyze_BAM($STAR_output_dir);
