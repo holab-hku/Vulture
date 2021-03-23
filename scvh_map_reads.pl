@@ -22,6 +22,8 @@ GetOptions(
 	'p|starPath=s' => \$STAR,
 	'a|alignment=s' => \$alignment,
 	'x|technology=s' => \$technology,
+	'b|pseudoBAM=<none>',
+
 
 ) or die_usage();
 
@@ -44,6 +46,7 @@ Options:                                                                        
 -r/--ram <int>            STARsolo param: limitGenomeGenerateRAM unit by GB                                [<$ram>]
 -a/--alignment <string>   Select alignment methods: 'STAR', 'KB', or 'CellRanger'                          [<$alignment>]
 -v/--technology <string>  KB param:  Single-cell technology used (`kb --list` to view)                     [<$technology>]
+-b/--pseudoBAM   		  Kallisto param:  generate BAM file for pseudo alignment                     
 ";
 }
 
@@ -305,7 +308,7 @@ sub run_KB {
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
 	
 	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
-	my $run_KBcount = "kb count -x=$technology -g=$genome_dir/transcripts_to_genes.txt -i=$genome_dir/transcriptome.idx -o=$output_dir -t=$threads -m=$ram --tmp=$output_dir/kbtemp --h5ad $R1 $R2";
+	my $run_KBcount = "kb count -x=$technology -g=$genome_dir/transcripts_to_genes.txt -i=$genome_dir/transcriptome.idx -o=$output_dir -t=$threads -m=$ram --tmp=$output_dir/kbtemp --h5ad --mm $R1 $R2";
 
 	system("$run_KBcount");
 	
