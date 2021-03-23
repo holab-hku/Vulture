@@ -28,9 +28,10 @@ RUN apt-get install -y curl grep sed dpkg && \
     apt-get clean
 
 RUN pip install kb-python && \
+    pip install umi_tools && \
     wget https://github.com/alexdobin/STAR/archive/2.7.8a.tar.gz && \
     tar -xzf 2.7.8a.tar.gz && \
-    Rscript ~/r/dependencies.r
+    Rscript ~/r/dependencies.r 
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 CMD [ "/bin/bash" ]
