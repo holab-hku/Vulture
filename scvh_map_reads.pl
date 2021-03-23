@@ -22,7 +22,7 @@ GetOptions(
 	'p|starPath=s' => \$STAR,
 	'a|alignment=s' => \$alignment,
 	'x|technology=s' => \$technology,
-	'b|pseudoBAM=<none>',
+	'b|pseudoBAM',
 
 
 ) or die_usage();
