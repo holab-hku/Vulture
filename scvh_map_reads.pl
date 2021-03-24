@@ -321,6 +321,13 @@ sub convert_h5ad_to_10x {
 	
 	#analyze_BAM($STAR_output_dir);
 }
+sub convert_BUS_to_text {
+	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	my $run_B2t = "bustools text -o $output_dir/output.unfiltered.txt $output_dir/output.unfiltered.bus";
+	system("$run_B2t");
+	
+	#analyze_BAM($STAR_output_dir);
+}
 
 sub get_reference_names_and_accessions {
 
