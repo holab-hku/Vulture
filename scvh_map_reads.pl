@@ -353,10 +353,9 @@ sub get_reference_names_and_accessions {
 }
 
 sub check_genome_fasta_gtf_present {
-	if ($virus_database eq "viruSITE"){
-		my $genome_fa = $genome_dir . "/$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome . ".fa";
-		my $genome_gtf = $genome_dir . "/$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
-	}elsif ($virus_database eq "viruSITE.NCBIprokaryotes"){
+	my $genome_fa = $genome_dir . "/$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome . ".fa";
+	my $genome_gtf = $genome_dir . "/$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
+	if ($virus_database eq "viruSITE.NCBIprokaryotes"){
 		my $genome_fa = $genome_dir . "/$host_species" . "_host_viruses_microbes.$virus_database.with_" . $host_ref_genome . ".fa";
 		my $genome_gtf = $genome_dir . "/$host_species" . "_host_viruses_microbes.$virus_database.with_" . $host_ref_genome;
 	}
