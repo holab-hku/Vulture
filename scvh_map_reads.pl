@@ -12,14 +12,14 @@ my $STAR = "~/STAR-2.7.8a/bin/Linux_x86_64_static/STAR";
 my $ram = 8;
 my $alignment = "STAR";
 my $technology = "10XV2";
-my $virus_database = "viruSITE";
+my $virus_database = "viruSITE.NCBIprokaryotes";
 
 
 GetOptions(
 	'o|output-dir=s' => \$output_dir,
 	't|threads=i' => \$threads,
 	'r|ram=i' => \$ram,
-	'd|virusdb=s' => \$virus_database,
+	'd|database=s' => \$virus_database,
 	's|soloStrand=s' => \$soloStrand,
 	'w|whitelist=s' => \$barcodes_whitelist,
 	'p|starPath=s' => \$STAR,
