@@ -68,6 +68,9 @@ if ($alignment eq "STAR") {
 	$ram = $ram * 1073741274;
 }
 
+print $virus_database;
+
+
 #params not planned to be user options (for now)
 my $host_species = "human";
 my $host_ref_genome = "hg38";
