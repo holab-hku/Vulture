@@ -12,11 +12,14 @@ my $STAR = "~/STAR-2.7.8a/bin/Linux_x86_64_static/STAR";
 my $ram = 8;
 my $alignment = "STAR";
 my $technology = "10XV2";
+my $virus_database = "viruSITE";
+
 
 GetOptions(
 	'o|output-dir=s' => \$output_dir,
 	't|threads=i' => \$threads,
 	'r|ram=i' => \$ram,
+	'd|virusdb=s' => \$virus_database,
 	's|soloStrand=s' => \$soloStrand,
 	'w|whitelist=s' => \$barcodes_whitelist,
 	'p|starPath=s' => \$STAR,
@@ -41,6 +44,7 @@ Options:                                                                        
 -o/--output-dir	<string>  the output directory                                                             [./]
 -p/--starPath <string>   STARsolo path                                                					   [<$STAR>]
 -t/--threads <int>        number of threads to run STARsolo with                                           [$threads]
+-d/--database <string>    select virus database, can be viruSITE or viruSITE.NCBIprokaryotes               [<$virus_database>]
 -s/--soloStrand <string>  STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively  [$soloStrand]
 -w/--whitelist <string>   STARsolo param --soloCBwhitelist                                                 [<$barcodes_whitelist>]
 -r/--ram <int>            STARsolo param: limitGenomeGenerateRAM unit by GB                                [<$ram>]
@@ -68,7 +72,6 @@ if ($alignment eq "STAR") {
 my $host_species = "human";
 my $host_ref_genome = "hg38";
 my $chr_prefix = "chr";
-my $virus_database = "viruSITE";
 my $use_removed_amb_viral_exon = "T";
 my $removed_amb_viral_exon_tag = "removed_amb_viral_exon";
 my @STAR_index_files = qw(SAindex SA Genome genomeParameters.txt chrStart.txt chrNameLength.txt chrName.txt chrLength.txt); #as of v2.7.5a
@@ -350,12 +353,17 @@ sub get_reference_names_and_accessions {
 }
 
 sub check_genome_fasta_gtf_present {
-	my $genome_fa = $genome_dir . "/$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome . ".fa";
+	if (virusdb eq "viruSITE"){
+		my $genome_fa = $genome_dir . "/$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome . ".fa";
+		my $genome_gtf = $genome_dir . "/$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
+	}elsif (virusdb eq "viruSITE.NCBIprokaryotes"){
+		my $genome_fa = $genome_dir . "/$host_species" . "_host_viruses_microbes.$virus_database.with_" . $host_ref_genome . ".fa";
+		my $genome_gtf = $genome_dir . "/$host_species" . "_host_viruses_microbes.$virus_database.with_" . $host_ref_genome;
+	}
 	unless ( (-e $genome_fa) && (-s $genome_fa) ) {
 		die "$genome_fa is not present or is empty\n";
 	}
 	
-	my $genome_gtf = $genome_dir . "/$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
 	if ($removed_amb_viral_exon_tag) {
 		$genome_gtf .= ".$removed_amb_viral_exon_tag.gtf";
 	} else {
