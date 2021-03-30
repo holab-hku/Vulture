@@ -25,6 +25,13 @@ def run_main(args):
     #Write matrix 
     io.mmwrite(args.output+"/matrix.mtx",adata.X.T.astype("int"))
     barcodes.to_csv(args.output+"/barcodes.tsv",sep="\t",header=None)
+
+    # Process emptygenename to be the gene id
+    if(len(genes[(genes.gene_name == "")])>0):
+        genes.gene_name=genes.gene_name.astype(str)
+        idx_empty_name =genes[(genes.gene_name == "")].index
+        genes.loc[idx_empty_name,"gene_name"]=idx_empty_name
+        
     genes.to_csv(args.output+"/"+gene_name_dict[args.chemistry],sep="\t",header=None)
 
 if __name__ == '__main__':
