@@ -2,7 +2,7 @@
 use strict; use warnings;
 use Getopt::Long qw(GetOptions);
 
-my $samtools = "/home/asdfken/tools/samtools-1.10/samtools";
+my $samtools = "samtools";
 my $extract_in_cell_gene_barcodes_script = "r/scvh_extract_in_cell_gene_barcodes.r";
 
 my $output_dir = ".";
