@@ -3,7 +3,7 @@ use strict; use warnings;
 use Getopt::Long qw(GetOptions);
 
 my $samtools = "/home/asdfken/tools/samtools-1.10/samtools";
-my $extract_in_cell_gene_barcodes_script = "perl/scvh_extract_in_cell_gene_barcodes.r";
+my $extract_in_cell_gene_barcodes_script = "r/scvh_extract_in_cell_gene_barcodes.r";
 
 my $output_dir = ".";
 my $sample_name = "";
@@ -96,7 +96,7 @@ get_in_cell_genes();
 #die;
 my $chr_prefix = "chr";
 
-my $STAR_output_dir = $output_dir . "/STARsolo_outs";
+my $STAR_output_dir = $output_dir . "/alignment_outs";
 
 unless (-d $STAR_output_dir) {
 	die "$STAR_output_dir cannot be found, please run scvh_map_reads.pl first\n";
