@@ -3,7 +3,7 @@ use strict; use warnings;
 use Getopt::Long qw(GetOptions);
 
 my $samtools = "/home/asdfken/tools/samtools-1.10/samtools";
-my $extract_in_cell_gene_barcodes_script = "/home/asdfken/tools/scvh/scvh_extract_in_cell_gene_barcodes.r";
+my $extract_in_cell_gene_barcodes_script = "perl/scvh_extract_in_cell_gene_barcodes.r";
 
 my $output_dir = ".";
 my $sample_name = "";
