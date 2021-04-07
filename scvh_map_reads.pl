@@ -27,7 +27,7 @@ GetOptions(
 	'p|starPath=s' => \$STAR,
 	'a|alignment=s' => \$alignment,
 	'x|technology=s' => \$technology,
-	'sf|soloFeatures' => \$soloFeatures, 
+	'f|soloFeatures' => \$soloFeatures, 
 	'pseudoBAM' => \$pseudoBAM,
 
 
