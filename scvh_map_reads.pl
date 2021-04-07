@@ -51,7 +51,7 @@ Options:                                                                        
 -s/--soloStrand <string>  STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively  [$soloStrand]
 -w/--whitelist <string>   STARsolo param --soloCBwhitelist                                                 [<$barcodes_whitelist>]
 -r/--ram <int>            STARsolo param: limitGenomeGenerateRAM unit by GB                                [<$ram>]
--sf/--soloFeatures <string>  STARsolo param:  See --soloFeatures in STARsolo manual                        [<$soloFeatures>]
+-f/--soloFeatures <string>  STARsolo param:  See --soloFeatures in STARsolo manual                        [<$soloFeatures>]
 -a/--alignment <string>   Select alignment methods: 'STAR', 'KB', or 'CellRanger'                          [<$alignment>]
 -v/--technology <string>  KB param:  Single-cell technology used (`kb --list` to view)                     [<$technology>]
 -b/--pseudoBAM   		  Kallisto param:  generate BAM file for pseudo alignment (No supported yet)                     
