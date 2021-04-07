@@ -27,9 +27,8 @@ GetOptions(
 	'p|starPath=s' => \$STAR,
 	'a|alignment=s' => \$alignment,
 	'x|technology=s' => \$technology,
-	'f|soloFeatures' => \$soloFeatures, 
+	'f|soloFeature=s' => \$soloFeatures, 
 	'pseudoBAM' => \$pseudoBAM,
-
 
 ) or die_usage();
 
