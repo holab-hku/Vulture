@@ -42,7 +42,11 @@ check_dirs_files_exist <- function(output_dir) {
 	}
 	
 	if (dir.exists(STARsolo_path_to_raw_matrix_path) == FALSE) {
-		stop(paste0("Can't find ",STARsolo_path_to_raw_matrix_path,", make sure STARsolo output directory structure is unchanged"))
+		# Check if GeneFull option is specified
+		STARsolo_path_to_raw_matrix <- "Solo.out/GeneFull/raw"
+		if (dir.exists(STARsolo_path_to_raw_matrix_path) == FALSE){
+			stop(paste0("Can't find ",STARsolo_path_to_raw_matrix_path,", make sure STARsolo output directory structure is unchanged"))
+		}		
 	}
 	
 	return(STARsolo_path_to_raw_matrix_path)
