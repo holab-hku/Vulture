@@ -109,6 +109,10 @@ if ($alignment eq "STAR") {
 	Alevin_if_nec();
 	run_Avlevin();
 
+}elsif ($alignment eq "CellRanger") {
+	Alevin_if_nec();
+	run_Avlevin();
+
 }
 
 
@@ -413,6 +417,56 @@ sub run_Avlevin {
 	system("salmon alevin -l ISR -i $index -1 $fq1 -2 $fq2 -o $output_dir -p $threads --tgMap $tx2gene2 --chromium --dumpFeatures --dumpBfh");
 
 	
+}
+sub CRref_if_nec {
+	
+	my $index_CR = "F";
+	my $CR_ref = $genome_dir . "/cr_references/";
+
+	my @CR_index_files = qw($CR_ref); #as of v2.7.5a
+
+	for my $CR_index_file (@CR_index_files) {
+		if (-e "$genome_dir/$CR_index_file") {
+			if (-s "$genome_dir/$KB_index_file") {
+			} else {
+				print "$genome_dir/$CR_index_file exists but is empty, will index Cell ranger genome\n";
+				$index_CR = "T";
+				last;
+			}
+		} else {
+			print "Can't find $genome_dir/$CR_index_file, will index Cell ranger genome\n";
+			$index_CR = "T";
+			last;
+		}
+	}
+	
+	if ($index_CR eq "F") {
+		print "Cell ranger genome index files all found, will proceed with the existing index\n";
+	} elsif ($index_CR eq "T") {
+		my $generate_genome = "cellranger mkref --genome=$CR_ref --fasta=$fa --genes=$gtf --nthreads=$threads";
+		system("$generate_genome");
+	}
+}
+sub run_CR {
+
+	my $CR_ref = $genome_dir . "/cr_references/";
+
+	
+	for my $R ($R2, $R1) {
+		unless ( (-e $R) && (-s $R) ) {
+			die "$R is not present or is empty\n";
+		}
+	}
+
+
+	
+	my $STAR_output_dir = $output_dir . "/alignment_outs/";
+	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
+	
+	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	my $run_CR = "cellranger count --id=$output_dir --fastqs=$R1 --sample=$R2 --localcores=$thread --transcriptome=$CR_ref";
+
+	system("$run_CR");
 }
 
 sub get_reference_names_and_accessions {
