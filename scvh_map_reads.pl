@@ -423,7 +423,9 @@ sub CRref_if_nec {
 	my $index_CR = "F";
 	my $CR_ref = $genome_dir . "/cr_references/";
 
-	my @CR_index_files = qw($CR_ref); #as of v2.7.5a
+	my $genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
+
+	my @CR_index_files = qw($genome); #as of v2.7.5a
 
 	for my $CR_index_file (@CR_index_files) {
 		if (-e "$genome_dir/$CR_index_file") {
@@ -443,15 +445,18 @@ sub CRref_if_nec {
 	if ($index_CR eq "F") {
 		print "Cell ranger genome index files all found, will proceed with the existing index\n";
 	} elsif ($index_CR eq "T") {
-		my $generate_genome = "cellranger mkref --genome=$CR_ref --fasta=$fa --genes=$gtf --nthreads=$threads";
+		my $generate_genome = "cellranger mkref --genome=$genomeid --fasta=$fa --genes=$gtf --nthreads=$threads";
 		system("$generate_genome");
 	}
+	# Move the genome file
+	system("mv $genomeid $output_dir");
+
 }
 sub run_CR {
 
-	my $CR_ref = $genome_dir . "/cr_references/";
+	my $genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
+	my $CR_ref = $genome_dir . "/$genomeid";
 
-	
 	for my $R ($R2, $R1) {
 		unless ( (-e $R) && (-s $R) ) {
 			die "$R is not present or is empty\n";
@@ -464,9 +469,12 @@ sub run_CR {
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
 	
 	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
-	my $run_CR = "cellranger count --id=$output_dir --fastqs=$R1 --sample=$R2 --localcores=$threads --transcriptome=$CR_ref";
+	my $run_CR = "cellranger count --id=run_$R2 --fastqs=$R1 --sample=$R2 --localcores=$threads --transcriptome=$CR_ref";
 
 	system("$run_CR");
+
+	system("mv run_$R2  $genome_dir");
+
 }
 
 sub get_reference_names_and_accessions {
