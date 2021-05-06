@@ -464,7 +464,7 @@ sub run_CR {
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
 	
 	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
-	my $run_CR = "cellranger count --id=$output_dir --fastqs=$R1 --sample=$R2 --localcores=$thread --transcriptome=$CR_ref";
+	my $run_CR = "cellranger count --id=$output_dir --fastqs=$R1 --sample=$R2 --localcores=$threads --transcriptome=$CR_ref";
 
 	system("$run_CR");
 }
