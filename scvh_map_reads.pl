@@ -427,7 +427,7 @@ sub CRref_if_nec {
 
 	for my $CR_index_file (@CR_index_files) {
 		if (-e "$genome_dir/$CR_index_file") {
-			if (-s "$genome_dir/$KB_index_file") {
+			if (-s "$genome_dir/$CR_index_file") {
 			} else {
 				print "$genome_dir/$CR_index_file exists but is empty, will index Cell ranger genome\n";
 				$index_CR = "T";
