@@ -110,8 +110,8 @@ if ($alignment eq "STAR") {
 	run_Avlevin();
 
 }elsif ($alignment eq "CellRanger") {
-	Alevin_if_nec();
-	run_Avlevin();
+	CRref_if_nec();
+	run_CR();
 
 }
 
