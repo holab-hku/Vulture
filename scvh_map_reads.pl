@@ -106,7 +106,7 @@ if ($alignment eq "STAR") {
 	convert_h5ad_to_10x();
 	convert_BUS_to_text();
 }elsif ($alignment eq "Alevin") {
-	Avlevin_if_nec();
+	Alevin_if_nec();
 	run_Avlevin();
 
 }
