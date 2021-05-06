@@ -357,7 +357,7 @@ sub Alevin_if_nec {
 
 	system("grep \">\" $fa | cut -d \">\" -f 2 | cut -d \" \" -f 1 > $chrnames_txt");
 	my $gentrome = $genome_name . ".gentrome.fa";
-	system("cat $cdna_fa $genome_fa > $gentrome");
+	system("cat $cdna_fa $fa > $gentrome");
 	
 	#salmon index
 	my $index = "$genome_name.sidx";
