@@ -357,8 +357,8 @@ sub Alevin_if_nec {
 	my $tx2gene2 = "$genome_name.tx2gene.2.txt";
 
 
-	$AV_file_list = "$chrnames_txt $gentrome $index $tx2gene2";
-	my @CR_index_files = split(' ', $AV_file_list);
+	my $AV_file_list = "$chrnames_txt $gentrome $index $tx2gene2";
+	my @AV_index_files = split(' ', $AV_file_list);
 
 	my $index_AV = "F";
 	
@@ -429,10 +429,10 @@ sub CRref_if_nec {
 	my $index_CR = "F";
 	my $CR_ref = $genome_dir . "/cr_references/";
 
+	my $genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
+
 	if ($virus_database eq "viruSITE.NCBIprokaryotes"){
 		$genomeid = "$host_species" . "_host_viruses_microbes.$virus_database.with_" . $host_ref_genome;
-	}else{
-		$genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
 	}
 
 	my @CR_index_files = $genomeid; #as of v2.7.5a
@@ -463,13 +463,11 @@ sub CRref_if_nec {
 
 }
 sub run_CR {
+	my $genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
 
 	if ($virus_database eq "viruSITE.NCBIprokaryotes"){
 		$genomeid = "$host_species" . "_host_viruses_microbes.$virus_database.with_" . $host_ref_genome;
-	}else{
-		$genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
 	}
-
 	my $CR_ref = $genome_dir . "/$genomeid";
 
 	for my $R ($R2, $R1) {
