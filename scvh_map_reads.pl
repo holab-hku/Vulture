@@ -449,7 +449,7 @@ sub CRref_if_nec {
 		system("$generate_genome");
 	}
 	# Move the genome file
-	system("mv $genomeid $output_dir");
+	system("mv $genomeid $genome_dir");
 
 }
 sub run_CR {
@@ -472,7 +472,6 @@ sub run_CR {
 	my $run_CR = "cellranger count --id=run_$R2 --fastqs=$R1 --sample=$R2 --localcores=$threads --transcriptome=$CR_ref";
 
 	system("$run_CR");
-
 	system("mv run_$R2  $genome_dir");
 
 }
