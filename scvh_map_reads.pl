@@ -416,9 +416,9 @@ sub run_Avlevin {
 
 	my $final_output_dir = $output_dir . "/alignment_outs/Solo.out/Gene/raw";
 	system("mkdir -p $final_output_dir");
-	system("mv $output_dir/alevin/quants_tier_mat.gz final_output_dir/matrix.mtx.gz");
-	system("mv $output_dir/alevin/quants_mat_cols.txt final_output_dir/features.tsv");
-	system("mv $output_dir/alevin/quants_mat_rows.txt final_output_dir/barcodes.tsv");
+	system("mv $output_dir/alevin/quants_tier_mat.gz $final_output_dir/matrix.mtx.gz");
+	system("mv $output_dir/alevin/quants_mat_cols.txt $final_output_dir/features.tsv");
+	system("mv $output_dir/alevin/quants_mat_rows.txt $final_output_dir/barcodes.tsv");
 }
 sub CRref_if_nec {
 	
@@ -481,7 +481,7 @@ sub run_CR {
 
 	my $output_dir = $output_dir . "/alignment_outs/Solo.out/Gene/raw";
 	system("mkdir -p $output_dir");
-	system("mv run_$R2/outs/raw_feature_bc_matrix/* ");
+	system("mv run_$R2/outs/raw_feature_bc_matrix/* $final_output_dir");
 }
 
 sub get_reference_names_and_accessions {
