@@ -356,9 +356,7 @@ sub Alevin_if_nec {
 	my $index = "$genome_dir/avsidx";
 	my $tx2gene2 = "$genome_dir/tx2gene.2.txt";
 
-
-	my $AV_file_list = "$chrnames_txt $gentrome $index $tx2gene2";
-	my @AV_index_files = split(' ', $AV_file_list);
+	my @AV_index_files = ($chrnames_txt $gentrome $index $tx2gene2);
 
 	my $index_AV = "F";
 	
