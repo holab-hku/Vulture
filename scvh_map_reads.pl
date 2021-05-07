@@ -470,7 +470,7 @@ sub run_CR {
 	}
 	my $CR_ref = $genome_dir . "/$genomeid";
 
-	for my $R ($R2, $R1) {
+	for my $R ($R1) {
 		unless ( (-e $R) && (-s $R) ) {
 			die "$R is not present or is empty\n";
 		}
