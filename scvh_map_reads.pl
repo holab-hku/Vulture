@@ -356,7 +356,7 @@ sub Alevin_if_nec {
 	my $index = "$genome_dir/avsidx";
 	my $tx2gene2 = "$genome_dir/tx2gene.2.txt";
 
-	my @AV_index_files = ($chrnames_txt $gentrome $index $tx2gene2);
+	my @AV_index_files = ($chrnames_txt, $gentrome, $index, $tx2gene2);
 
 	my $index_AV = "F";
 	
@@ -479,7 +479,7 @@ sub run_CR {
 	system("$run_CR");
 	#system("mv run_$R2  $genome_dir");
 
-	my $output_dir = $output_dir . "/alignment_outs/Solo.out/Gene/raw";
+	my $final_output_dir = $output_dir . "/alignment_outs/Solo.out/Gene/raw";
 	system("mkdir -p $output_dir");
 	system("mv run_$R2/outs/raw_feature_bc_matrix/* $final_output_dir");
 }
