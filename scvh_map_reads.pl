@@ -350,11 +350,11 @@ sub Alevin_if_nec {
 	KBref_if_nec();
 	my $cdna_fa = "$genome_dir/cdna.fa";
 	my ($genome_name) = $fa =~ /(.*)\.fa/; 
-	my $chrnames_txt = "$genome_name.chrnames.txt";
+	my $chrnames_txt = $genome_name.".chrnames.txt";
 
 	my $gentrome = $genome_name . ".gentrome.fa";
-	my $index = "$genome_name.sidx";
-	my $tx2gene2 = "$genome_name.tx2gene.2.txt";
+	my $index = $genome_name.".sidx";
+	my $tx2gene2 = $genome_name.".tx2gene.2.txt";
 
 
 	my $AV_file_list = "$chrnames_txt $gentrome $index $tx2gene2";
