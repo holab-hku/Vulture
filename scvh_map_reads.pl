@@ -419,7 +419,6 @@ sub run_Avlevin {
 
 	my $final_output_dir = $output_dir . "/alignment_outs/Solo.out/Gene/raw";
 	system("mkdir -p $final_output_dir")
-	
 	system("mv $output_dir/alevin/quants_tier_mat.gz final_output_dir/matrix.mtx.gz")
 	system("mv $output_dir/alevin/quants_mat_cols.txt final_output_dir/features.tsv")
 	system("mv $output_dir/alevin/quants_mat_rows.txt final_output_dir/barcodes.tsv")
@@ -465,7 +464,12 @@ sub CRref_if_nec {
 }
 sub run_CR {
 
-	my $genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
+	if ($virus_database eq "viruSITE.NCBIprokaryotes"){
+		$genomeid = "$host_species" . "_host_viruses_microbes.$virus_database.with_" . $host_ref_genome;
+	}else{
+		$genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
+	}
+
 	my $CR_ref = $genome_dir . "/$genomeid";
 
 	for my $R ($R2, $R1) {
@@ -473,11 +477,6 @@ sub run_CR {
 			die "$R is not present or is empty\n";
 		}
 	}
-
-
-	
-	my $STAR_output_dir = $output_dir . "/alignment_outs/";
-	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
 	
 	#my $run_STAR = "$STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
 	my $run_CR = "cellranger count --id=run_$R2 --fastqs=$R1 --sample=$R2 --localcores=$threads --transcriptome=$CR_ref";
