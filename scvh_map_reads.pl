@@ -424,7 +424,11 @@ sub CRref_if_nec {
 	my $index_CR = "F";
 	my $CR_ref = $genome_dir . "/cr_references/";
 
-	my $genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
+	if ($virus_database eq "viruSITE.NCBIprokaryotes"){
+		$genomeid = "$host_species" . "_host_viruses_microbes.$virus_database.with_" . $host_ref_genome;
+	}else{
+		$genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
+	}
 
 	my @CR_index_files = $genomeid; #as of v2.7.5a
 
