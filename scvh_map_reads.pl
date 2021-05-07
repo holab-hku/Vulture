@@ -356,8 +356,9 @@ sub Alevin_if_nec {
 	my $index = "$genome_name.sidx";
 	my $tx2gene2 = "$genome_name.tx2gene.2.txt";
 
-	my @AV_index_files = qw($chrnames_txt $gentrome $index $tx2gene2); #as of v2.7.5a
 
+	$AV_file_list = "$chrnames_txt $gentrome $index $tx2gene2";
+	my @CR_index_files = split(' ', $AV_file_list);
 
 	my $index_AV = "F";
 	
@@ -425,7 +426,7 @@ sub CRref_if_nec {
 
 	my $genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
 
-	my @CR_index_files = qw($genomeid); #as of v2.7.5a
+	my @CR_index_files = $genomeid; #as of v2.7.5a
 
 	for my $CR_index_file (@CR_index_files) {
 		if (-e "$genome_dir/$CR_index_file") {
