@@ -425,7 +425,7 @@ sub CRref_if_nec {
 
 	my $genomeid = "$host_species" . "_host_viruses.$virus_database.with_" . $host_ref_genome;
 
-	my @CR_index_files = qw($genome); #as of v2.7.5a
+	my @CR_index_files = qw($genomeid); #as of v2.7.5a
 
 	for my $CR_index_file (@CR_index_files) {
 		if (-e "$genome_dir/$CR_index_file") {
