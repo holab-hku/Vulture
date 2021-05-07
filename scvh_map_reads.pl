@@ -456,9 +456,10 @@ sub CRref_if_nec {
 	} elsif ($index_CR eq "T") {
 		my $generate_genome = "cellranger mkref --genome=$genomeid --fasta=$fa --genes=$gtf --nthreads=$threads";
 		system("$generate_genome");
+		# Move the genome file
+		system("mv $genomeid $genome_dir");
+
 	}
-	# Move the genome file
-	system("mv $genomeid $genome_dir");
 
 }
 sub run_CR {
