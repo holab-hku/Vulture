@@ -417,7 +417,13 @@ sub run_Avlevin {
 
 	system("salmon alevin -l ISR -i $index -1 $fq1 -2 $fq2 -o $output_dir -p $threads --tgMap $tx2gene2 --chromium --dumpFeatures --dumpBfh");
 
+	my $final_output_dir = $output_dir . "/alignment_outs/Solo.out/Gene/raw";
+	system("mkdir -p $final_output_dir")
 	
+	system("mv $output_dir/alevin/quants_tier_mat.gz final_output_dir/matrix.mtx.gz")
+	system("mv $output_dir/alevin/quants_mat_cols.txt final_output_dir/features.tsv")
+	system("mv $output_dir/alevin/quants_mat_rows.txt final_output_dir/barcodes.tsv")
+
 }
 sub CRref_if_nec {
 	
@@ -477,8 +483,11 @@ sub run_CR {
 	my $run_CR = "cellranger count --id=run_$R2 --fastqs=$R1 --sample=$R2 --localcores=$threads --transcriptome=$CR_ref";
 
 	system("$run_CR");
-	system("mv run_$R2  $genome_dir");
+	#system("mv run_$R2  $genome_dir");
 
+	my $output_dir = $output_dir . "/alignment_outs/Solo.out/Gene/raw";
+	system("mkdir -p $output_dir")
+	system("mv run_$R2/outs/raw_feature_bc_matrix/* ")
 }
 
 sub get_reference_names_and_accessions {
