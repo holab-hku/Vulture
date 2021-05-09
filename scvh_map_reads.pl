@@ -480,7 +480,7 @@ sub run_CR {
 	#system("mv run_$R2  $genome_dir");
 
 	my $final_output_dir = $output_dir . "/alignment_outs/Solo.out/Gene/raw";
-	system("mkdir -p $output_dir");
+	system("mkdir -p $final_output_dir");
 	system("mv run_$R2/outs/raw_feature_bc_matrix/* $final_output_dir");
 }
 
