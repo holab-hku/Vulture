@@ -452,9 +452,11 @@ sub CRref_if_nec {
 		print "Cell ranger genome index files all found, will proceed with the existing index\n";
 	} elsif ($index_CR eq "T") {
 		my $generate_genome = "cellranger mkref --genome=$genomeid --fasta=$fa --genes=$gtf --nthreads=$threads";
+
+		chdir $genome_dir;
 		system("$generate_genome");
 		# Move the genome file
-		system("mv $genomeid $genome_dir");
+		# system("mv $genomeid $genome_dir");
 
 	}
 
@@ -480,9 +482,11 @@ sub run_CR {
 	#system("mv run_$R2  $genome_dir");
 
 	my $final_output_dir = $output_dir . "/alignment_outs/Solo.out/Gene/raw";
+
+	chdir $output_dir;
 	system("mkdir -p $final_output_dir");
 	system("mv run_$R2/outs/raw_feature_bc_matrix/* $final_output_dir");
-	system("mv run_$R2 $output_dir");
+	#system("mv run_$R2 $output_dir");
 
 }
 
