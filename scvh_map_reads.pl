@@ -106,7 +106,7 @@ if ($alignment eq "STAR") {
 	convert_BUS_to_text();
 }elsif ($alignment eq "Alevin") {
 	Alevin_if_nec();
-	run_Avlevin();
+	run_Alevin();
 
 }elsif ($alignment eq "CellRanger") {
 	CRref_if_nec();
@@ -388,7 +388,7 @@ sub Alevin_if_nec {
 	}
 
 }
-sub run_Avlevin {
+sub run_Alevin {
 
 	my $cdna_fa = "$genome_dir/cdna.fa";
 	my ($genome_name) = $fa =~ /(.*)\.fa/; 
