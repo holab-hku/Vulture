@@ -361,15 +361,15 @@ sub Alevin_if_nec {
 	my $index_AV = "F";
 	
 	for my $AV_index_file (@AV_index_files) {
-		if (-e "$genome_dir/$AV_index_file") {
-			if (-s "$genome_dir/$AV_index_file") {
+		if (-e "$AV_index_file") {
+			if (-s "$AV_index_file") {
 			} else {
-				print "$genome_dir/$AV_index_file exists but is empty, will index Alevin genome\n";
+				print "$AV_index_file exists but is empty, will index Alevin genome\n";
 				$index_AV = "T";
 				last;
 			}
 		} else {
-			print "Can't find $genome_dir/$AV_index_file, will index Alevin genome\n";
+			print "Can't find $AV_index_file, will index Alevin genome\n";
 			$index_AV = "T";
 			last;
 		}
