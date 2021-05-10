@@ -33,7 +33,7 @@ perl scvh_map_reads.pl -t num_threads -o output_dir vh_genome_dir R2.fastq.gz R1
 For CellRanger:
 
 ```sh
-perl scvh_map_reads.pl -t num_threads -o output_dir vh_genome_dir run_id fastq_folder
+perl scvh_map_reads.pl -t num_threads -o output_dir vh_genome_dir sample fastqs
 ```
 
 Filter the mapped UMIs using EmptyDrops to get the viral host filtered UMI counts matrix and also output viral genes and barcodes info files
