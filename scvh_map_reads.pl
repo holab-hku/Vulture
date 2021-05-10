@@ -482,6 +482,8 @@ sub run_CR {
 	my $final_output_dir = $output_dir . "/alignment_outs/Solo.out/Gene/raw";
 	system("mkdir -p $final_output_dir");
 	system("mv run_$R2/outs/raw_feature_bc_matrix/* $final_output_dir");
+	system("mv run_$R2 $output_dir");
+
 }
 
 sub get_reference_names_and_accessions {
