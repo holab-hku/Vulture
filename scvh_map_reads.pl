@@ -8,7 +8,6 @@ my $soloStrand = "Reverse"; #Reverse is used for 10x 5' protocol, while Forward 
 my $genome_dir = "\"vh_genome_dir\"";
 my $barcodes_whitelist = "$genome_dir/737K-august-2016.txt";
 #definitely needed, can use static version for now, but eventually user should pre-install STAR
-my $EXE = "~/STAR-2.7.8a/bin/Linux_x86_64_static/STAR";
 my $ram = 8;
 my $alignment = "STAR";
 my $technology = "10XV2";
@@ -24,7 +23,6 @@ GetOptions(
 	'd|database=s' => \$virus_database,
 	's|soloStrand=s' => \$soloStrand,
 	'w|whitelist=s' => \$barcodes_whitelist,
-	'p|exePath=s' => \$EXE,
 	'a|alignment=s' => \$alignment,
 	'x|technology=s' => \$technology,
 	'f|soloFeature=s' => \$soloFeatures, 
@@ -44,7 +42,6 @@ Usage: scvh_map_reads.pl [Options] <vh_genome_dir> <R2> <R1>
 
 Options:                                                                                                                                Defaults
 -o/--output-dir	<string>   the output directory                                                                                          [./]
--p/--exePath <string>      path of the aligner precompiled aligner                                                					     [<$EXE>]
 -t/--threads <int>         number of threads to run alignment with                                                                       [<$threads>]
 -d/--database <string>     select virus or virus and prokaryotes database, can be 'viruSITE' or 'viruSITE.NCBIprokaryotes'               [<$virus_database>]
 -s/--soloStrand <string>   STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively                               [<$soloStrand>]
@@ -244,7 +241,7 @@ sub run_STAR {
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
 	
 	#my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
-	my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	my $run_STAR = "STAR --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
 
 	system("$run_STAR");
 	
@@ -273,7 +270,7 @@ sub index_STAR_genome_if_nec {
 	if ($index_STAR eq "F") {
 		print "STAR genome index files all found, will proceed with the existing index\n";
 	} elsif ($index_STAR eq "T") {
-		my $generate_genome = "$EXE --runThreadN $threads --runMode genomeGenerate --genomeDir $genome_dir --genomeFastaFiles $fa";
+		my $generate_genome = "STAR --runThreadN $threads --runMode genomeGenerate --genomeDir $genome_dir --genomeFastaFiles $fa";
 		system("$generate_genome");
 	}
 }
@@ -324,7 +321,7 @@ sub run_KB {
 	my $STAR_output_dir = $output_dir . "/alignment_outs/";
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
 	
-	#my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	#my $run_STAR = "STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
 	my $run_KBcount = "kb count -x=$technology -g=$genome_dir/transcripts_to_genes.txt -i=$genome_dir/transcriptome.idx -o=$output_dir -t=$threads -m=$ram --tmp=$output_dir/kbtemp --h5ad --mm $R1 $R2";
 
 	system("$run_KBcount");
@@ -332,14 +329,14 @@ sub run_KB {
 	#analyze_BAM($STAR_output_dir);
 }
 sub convert_h5ad_to_10x {
-	#my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	#my $run_STAR = "STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
 	my $run_convert = "python python/h5adto10x.py -i $output_dir/counts_unfiltered/adata.h5ad -o $output_dir/alignment_outs/Solo.out/Gene/raw -v $technology";
 	system("$run_convert");
 	
 	#analyze_BAM($STAR_output_dir);
 }
 sub convert_BUS_to_text {
-	#my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	#my $run_STAR = "STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
 	my $run_B2t = "bustools text -o $output_dir/output.unfiltered.txt $output_dir/output.unfiltered.bus";
 	system("$run_B2t");
 	
@@ -474,7 +471,7 @@ sub run_CR {
 		}
 	}
 	
-	#my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	#my $run_STAR = "STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
 	my $run_CR = "cellranger count --id=run_$R2 --fastqs=$R1 --sample=$R2 --localcores=$threads --transcriptome=$CR_ref";
 
 	system("$run_CR");

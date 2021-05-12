@@ -1,6 +1,9 @@
 ## <a name="require"></a>Requirements
 * Input: 10x Chromium scRNA-seq reads
-* STAR >= v2.7.5a
+* STAR >= v2.7.8a
+* cellranger >= 6.0.0
+* Kallisto|bustools >= 0.25.1
+* salmon|alevin >= v1.4.0
 * DropletUtils >= v1.10.2
 
 ## <a name="gen_usages"></a>General usage
@@ -12,7 +15,6 @@ Usage: scvh_map_reads.pl [Options] <vh_genome_dir> <R2> <R1>
 
 Options:                                                                                                                
 -o/--output-dir	<string>   the output directory                                                                                        
--p/--exePath <string>      path of the aligner precompiled aligner                                                					   
 -t/--threads <int>         number of threads to run alignment with                                                                       
 -d/--database <string>     select virus or virus and prokaryotes database, can be 'viruSITE' or 'viruSITE.NCBIprokaryotes'               
 -s/--soloStrand <string>   STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively                               
