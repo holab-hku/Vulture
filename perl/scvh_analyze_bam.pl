@@ -1,9 +1,13 @@
 #!/usr/bin/perl
 use strict; use warnings;
 use Getopt::Long qw(GetOptions);
+use Cwd qw(getcwd);
+my $dir = getcwd;
+my @dir_str = split('/', "$dir/$0");
+my $code_dir = join "/", @dir_str[0 .. $#dir_str-1];
 
 my $samtools = "samtools";
-my $extract_in_cell_gene_barcodes_script = "r/scvh_extract_in_cell_gene_barcodes.r";
+my $extract_in_cell_gene_barcodes_script = "$code_dir/r/scvh_extract_in_cell_gene_barcodes.r";
 
 my $output_dir = ".";
 my $sample_name = "";
