@@ -20,7 +20,8 @@ Options:
 -s/--soloStrand <string>   STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively                               
 -w/--whitelist <string>    STARsolo param --soloCBwhitelist                                                                            
 -r/--ram <int>             Limitation of RAM usage. For STARsolo, param: limitGenomeGenerateRAM unit by GB 
--f/--soloFeatures <string> STARsolo param:  See --soloFeatures in STARsolo manual                                                        
+-f/--soloFeatures <string> STARsolo param:  See --soloFeatures in STARsolo manual
+-ot/--outSAMtype <string>  STARsolo param:  See --outSAMtype in STARsolo manual                                                          
 -a/--alignment <string>    Select alignment methods: 'STAR', 'KB', 'Alevin', or 'CellRanger'                                             
 -v/--technology <string>   KB param:  Single-cell technology used (`kb --list` to view)                                                  
 

@@ -14,6 +14,7 @@ my $technology = "10XV2";
 my $virus_database = "viruSITE.NCBIprokaryotes";
 my $pseudoBAM = "";
 my $soloFeatures = "Gene";
+my $outSAMtype = "BAM SortedByCoordinate";
 
 
 GetOptions(
@@ -26,6 +27,7 @@ GetOptions(
 	'a|alignment=s' => \$alignment,
 	'x|technology=s' => \$technology,
 	'f|soloFeature=s' => \$soloFeatures, 
+	'ot|outSAMtype=s' => \$outSAMtype,
 	'pseudoBAM' => \$pseudoBAM,
 
 ) or die_usage();
@@ -48,6 +50,7 @@ Options:                                                                        
 -w/--whitelist <string>    STARsolo param --soloCBwhitelist                                                                              [<$barcodes_whitelist>]
 -r/--ram <int>             Limitation of RAM usage. For STARsolo, param: limitGenomeGenerateRAM unit by GB                               [<$ram>]
 -f/--soloFeatures <string> STARsolo param:  See --soloFeatures in STARsolo manual                                                        [<$soloFeatures>]
+-ot/--outSAMtype <string>  STARsolo param:  See --outSAMtype in STARsolo manual                                                          [<$outSAMtype>]
 -a/--alignment <string>    Select alignment methods: 'STAR', 'KB', 'Alevin', or 'CellRanger'                                             [<$alignment>]
 -v/--technology <string>   KB param:  Single-cell technology used (`kb --list` to view)                                                  [<$technology>]
 ";
@@ -239,9 +242,16 @@ sub run_STAR {
 	
 	my $STAR_output_dir = $output_dir . "/alignment_outs/";
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
+
+	my $outSAMattributes = "CR CY CB UR UY UB sM GX GN";
+
+	my @strSAMtype = split(" ", $outSAMtype);
 	
+	if( 'Unsorted' ~~ @strSAMtype ){
+		$outSAMattributes = "CR CY UR UY sM GX GN";
+	}
 	#my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
-	my $run_STAR = "STAR --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
+	my $run_STAR = "STAR --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outSAMtype $outSAMtype --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --readFilesIn $R2 $R1";
 
 	system("$run_STAR");
 	
