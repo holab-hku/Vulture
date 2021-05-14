@@ -1,13 +1,13 @@
 ## <a name="require"></a>Requirements
 * Input: 10x Chromium scRNA-seq reads
-* STAR >= v2.7.8a
-* cellranger >= 6.0.0
-* Kallisto|bustools >= 0.25.1
+* STAR >= v2.7.9a or
+* cellranger >= 6.0.0 or
+* Kallisto|bustools >= 0.25.1 or
 * salmon|alevin >= v1.4.0
 * DropletUtils >= v1.10.2
 
 ## <a name="gen_usages"></a>General usage
-Map 10x scRNA-seq reads to the viral host reference set using STARsolo, CellRanger, Kallisto|bustools, and Salmon|Alevin.
+Map 10x scRNA-seq reads to the viral host reference set using STARsolo, CellRanger, Kallisto|bustools, or Salmon|Alevin.
 
 
 ```sh
@@ -22,7 +22,8 @@ Options:
 -w/--whitelist <string>    STARsolo param --soloCBwhitelist                                                                            
 -r/--ram <int>             Limitation of RAM usage. For STARsolo, param: limitGenomeGenerateRAM unit by GB 
 -f/--soloFeatures <string> STARsolo param:  See --soloFeatures in STARsolo manual
--ot/--outSAMtype <string>  STARsolo param:  See --outSAMtype in STARsolo manual                                                          
+-ot/--outSAMtype <string>  STARsolo param:  See --outSAMtype in STARsolo manual     
+-mm/--soloMultiMappers <string>  STARsolo param:  See --soloMultiMappers in STARsolo manual
 -a/--alignment <string>    Select alignment methods: 'STAR', 'KB', 'Alevin', or 'CellRanger'                                             
 -v/--technology <string>   KB param:  Single-cell technology used (`kb --list` to view)                                                  
 
