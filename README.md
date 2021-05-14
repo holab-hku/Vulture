@@ -16,7 +16,8 @@ Usage: scvh_map_reads.pl [Options] <vh_genome_dir> <R2> <R1>
 Options:                                                                                                                
 -o/--output-dir	<string>   the output directory                                                                                        
 -t/--threads <int>         number of threads to run alignment with                                                                       
--d/--database <string>     select virus or virus and prokaryotes database, can be 'viruSITE' or 'viruSITE.NCBIprokaryotes'               
+-d/--database <string>     select virus or virus and prokaryotes database, can be 'viruSITE' or 'viruSITE.NCBIprokaryotes'      
+-e/--exe <string>          executable command or stand alone executable path of the alignment tool
 -s/--soloStrand <string>   STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively                               
 -w/--whitelist <string>    STARsolo param --soloCBwhitelist                                                                            
 -r/--ram <int>             Limitation of RAM usage. For STARsolo, param: limitGenomeGenerateRAM unit by GB 
