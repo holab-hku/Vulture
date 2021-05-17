@@ -1,7 +1,10 @@
 #!/usr/bin/perl
 use strict; use warnings;
 use Getopt::Long qw(GetOptions);
-
+use Cwd 'abs_path';
+my $dir = abs_path($0);
+my @dir_str = split('/', "$dir");
+my $code_dir = join "/", @dir_str[0 .. $#dir_str-1];
 my $output_dir = ".";
 my $threads = 1;
 my $soloStrand = "Reverse"; #Reverse is used for 10x 5' protocol, while Forward is used for 10x 3' protocol
@@ -357,8 +360,9 @@ sub run_KB {
 	#analyze_BAM($STAR_output_dir);
 }
 sub convert_h5ad_to_10x {
+	my $h5to10x = "$code_dir/python/h5adto10x.py";
 	#my $run_STAR = "STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
-	my $run_convert = "python python/h5adto10x.py -i $output_dir/counts_unfiltered/adata.h5ad -o $output_dir/alignment_outs/Solo.out/Gene/raw -v $technology";
+	my $run_convert = "python $h5to10x -i $output_dir/counts_unfiltered/adata.h5ad -o $output_dir/alignment_outs/Solo.out/Gene/raw -v $technology";
 	system("$run_convert");
 	
 	#analyze_BAM($STAR_output_dir);

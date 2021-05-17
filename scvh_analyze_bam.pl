@@ -4,7 +4,7 @@ use Getopt::Long qw(GetOptions);
 use Cwd 'abs_path';
 my $dir = abs_path($0);
 my @dir_str = split('/', "$dir");
-my $code_dir = join "/", @dir_str[0 .. $#dir_str-2];
+my $code_dir = join "/", @dir_str[0 .. $#dir_str-1];
 
 my $samtools = "samtools";
 my $extract_in_cell_gene_barcodes_script = "$code_dir/r/scvh_extract_in_cell_gene_barcodes.r";

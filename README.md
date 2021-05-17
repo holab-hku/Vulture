@@ -1,13 +1,13 @@
 ## <a name="require"></a>Requirements
 * Input: 10x Chromium scRNA-seq reads
+* DropletUtils >= v1.10.2
 * STAR >= v2.7.9a or
 * cellranger >= 6.0.0 or
 * Kallisto|bustools >= 0.25.1 or
 * salmon|alevin >= v1.4.0
-* DropletUtils >= v1.10.2
 
 ## <a name="gen_usages"></a>General usage
-Map 10x scRNA-seq reads to the viral host reference set using STARsolo, CellRanger, Kallisto|bustools, or Salmon|Alevin. 
+Map 10x scRNA-seq reads to the viral (and microbial) host reference set using STARsolo, CellRanger, Kallisto|bustools, or Salmon|Alevin. 
 
 ### 1. Map 10x scRNA-seq reads to the viral microbial host reference set:
 
@@ -29,22 +29,27 @@ Options:
 -v/--technology <string>   KB param:  Single-cell technology used (`kb --list` to view) (Default: "10XV2")
 
 ```
-For STARsolo, Kallisto|bustools, and Salmon|Alevin:
+For alignment option 'STAR', 'KB', and 'Alevin', run:
 ```sh
 perl scvh_map_reads.pl -t num_threads -o output_dir vmh_genome_dir R2.fastq.gz R1.fastq.gz
 ```
+where *-t* is a user-specified integer indicating number of threads to run with, *output_dir* is a user-specified directory to place the outputs, *vmh_genome_dir* is a pre-generated viral (and microbial) host (human) reference set directory, *R2.fastq.gz* and *R1.fastq.gz* are input 10x scRNA-seq reads.
 
-For CellRanger:
+For option 'CellRanger', run:
 
 ```sh
 perl scvh_map_reads.pl -t num_threads -o output_dir vmh_genome_dir sample fastqs
 ```
-### 2. Filter the mapped UMIs using EmptyDrops to get the viral host filtered UMI counts matrix and also output viral genes and barcodes info files:
+where *sample* and *fastqs* are two cellranger arguments: *--sample* and *--fastqs*. See documentation in [cellranger count](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/count) to infer rules of fastq and sample naming.
+
+### 2. Filter the mapped UMIs using EmptyDrops to get the viral (and microbial) host filtered UMI counts matrix and also output viral genes and barcodes info files:
 ```sh
 Usage: Rscript scvh_filter_matrix.r output_dir sample_name
 ```
+where *sample_name* is an optional user-specified tag to be used as a prefix for the output files.
+
 ### 3. (Optional, and STARsolo or CellRanger only) Output some quality control criteria of the post-EmptyDrops viral microbial supporting reads in the BAM file
 ```sh
 Usage: perl scvh_analyze_bam.pl output_dir sample_name
 ```
-*where -t is a user-specified integer indicating number of threads to run with, output_dir is a user-specified directory to place the outputs, vmh_genome_dir is a pre-generated viral host (human) reference set directory, R2.fastq.gz R1.fastq.gz are input 10x scRNA-seq reads, and sample_name is an optional user-specified tag to be used as a prefix for the output files.*
+
