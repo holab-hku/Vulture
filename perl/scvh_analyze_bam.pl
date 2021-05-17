@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 use strict; use warnings;
 use Getopt::Long qw(GetOptions);
-use Cwd qw(getcwd);
-my $dir = getcwd;
-my @dir_str = split('/', "$dir/$0");
+use Cwd 'abs_path';
+my $dir = abs_path($0);
+my @dir_str = split('/', "$dir");
 my $code_dir = join "/", @dir_str[0 .. $#dir_str-1];
 
 my $samtools = "samtools";
