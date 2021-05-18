@@ -26,8 +26,9 @@ RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificate
     apt-get clean && \
     pip install kb-python && \
     pip install umi_tools && \
-    wget https://github.com/alexdobin/STAR/archive/2.7.8a.tar.gz && \
-    tar -xzf 2.7.8a.tar.gz && \
+    wget https://github.com/alexdobin/STAR/archive/2.7.9a.tar.gz && \
+    tar -xzf 2.7.9a.tar.gz && \
+    echo "export PATH=~/STAR-2.7.9a/bin/Linux_x86_64_static:\$PATH" >> ~/.bashrc && \
     Rscript ~/r/scvh_dependencies.r 
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
