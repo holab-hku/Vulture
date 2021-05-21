@@ -124,7 +124,7 @@ if ($alignment eq "STAR") {
 	KBref_if_nec();
 	run_KB();
 	convert_h5ad_to_10x();
-	convert_BUS_to_text();
+	#convert_BUS_to_text();
 }elsif ($alignment eq "Alevin") {
 	Alevin_if_nec();
 	run_Alevin();
