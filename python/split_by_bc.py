@@ -98,8 +98,7 @@ def argument_parser() -> argparse.ArgumentParser:
                         required=True,
                         help="Output folder over these output files."
                         )
-    parser.add_argument("-s", "--supfix", action="append", type=str,
-                        required=True, default=".gz",
+    parser.add_argument("-s", "--supfix", action="append", type=str, default=".fastq.gz",
                         help="The extensions determine "
                              "which compression algorithm will be used. '.gz' "
                              "for gzip, '.bz2' for bzip2, '.xz' for xz. Other "
