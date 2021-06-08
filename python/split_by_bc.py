@@ -94,18 +94,16 @@ def argument_parser() -> argparse.ArgumentParser:
                         help="The R1 fastq file to be scattered.")
     parser.add_argument("-r2", "--input2", type=Path, required=True,
                         help="The R2 fastq file to be scattered.")
-    parser.add_argument("-o", "--output", action="append", type=Path,
-                        required=True,
+    parser.add_argument("-o", "--output", type=str,required=True,
                         help="Output folder over these output files."
                         )
-    parser.add_argument("-s", "--supfix", action="append", type=str, default=".fastq.gz",
+    parser.add_argument("-s", "--supfix", type=str, default=".fastq.gz",
                         help="The extensions determine "
                              "which compression algorithm will be used. '.gz' "
                              "for gzip, '.bz2' for bzip2, '.xz' for xz. Other "
                              "extensions will use no compression."
                         )
-    parser.add_argument("-p", "--prefix", type=str,
-                        required=True, default="output",
+    parser.add_argument("-p", "--prefix", type=str, default="output",
                         help="Output file name."
                               "Default=output."
                         )
