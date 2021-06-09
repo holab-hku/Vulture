@@ -93,35 +93,61 @@ def keysplitter(input_handle_R1: io.BufferedReader,input_handle_R2: io.BufferedR
     readline2 = fastq2_iterator.__next__
 
     not_at_end_of_file = True
-
     while not_at_end_of_file:
-        block1 = []
-        block2 = []
-        #table = [[0]*2 for i in range(n_files)]
+        blocks1 = [ [] for i in range(n_files)]
+        blocks2 = [ [] for i in range(n_files)]
 
 
         # This is the fastest way to read blocks of lines in pure python.
         # The method used in split_cy is slower in pure python because it
         # stores the counting integer as a PyObject.
         for j in range(lines_per_block):
-            try:
-                block1.append(readline1())
-                block2.append(readline2())
+            temp1 = []
+            temp2 = []
+            for i in range(0,4):
+                try:
+                    temp1.append(readline1())
+                    temp2.append(readline2())
 
-            # Readline should throw a StopIteration at EOF
-            except StopIteration:
-                not_at_end_of_file = False
-                if(block1 == []):
-                    return 
-                break
+                # Readline should throw a StopIteration at EOF
+                except StopIteration:
+                    not_at_end_of_file = False
+                    if(temp1 == []):
+                        return 
+                    break
 
-        # Select the output handle and write the block to it.
+            group_number = hash(temp1[1][key_offset:key_length])%n_files
+            blocks1[group_number].append(temp1)
+            blocks2[group_number].append(temp2)
 
-        group_number = hash(block1[1][key_offset:key_length])%n_files
-        output_handles[group_number].write(b"".join(block1))
-        output_handles[group_number+n_files].write(b"".join(block2))
+        for f in range(n_files):
+            # Select the output handle and write the block to it.
+            output_handles[f].write(b"".join(blocks1[f][0]))
+            output_handles[f+n_files].write(b"".join(blocks2[f][0]))
+            
+    # while not_at_end_of_file:
+    #     block1 = []
+    #     block2 = []
+    #     #table = [[0]*2 for i in range(n_files)]
 
-        # Set the group number for the next group to be written.
-        # group_number += 1
-        # if group_number == number_of_output_files:
-        #     group_number = 0
+
+    #     # This is the fastest way to read blocks of lines in pure python.
+    #     # The method used in split_cy is slower in pure python because it
+    #     # stores the counting integer as a PyObject.
+    #     for j in range(lines_per_block):
+    #         try:
+    #             block1.append(readline1())
+    #             block2.append(readline2())
+
+    #         # Readline should throw a StopIteration at EOF
+    #         except StopIteration:
+    #             not_at_end_of_file = False
+    #             if(block1 == []):
+    #                 return 
+    #             break
+
+    #     # Select the output handle and write the block to it.
+
+    #     group_number = hash(block1[1][key_offset:key_length])%n_files
+    #     output_handles[group_number].write(b"".join(block1))
+    #     output_handles[group_number+n_files].write(b"".join(block2))
