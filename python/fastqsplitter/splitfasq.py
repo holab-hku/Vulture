@@ -104,6 +104,8 @@ def key_split_fastqs(input_file_1: Path,input_file_2: Path, output_files: List[P
         ]  # type: List[io.BufferedWriter]
         if use_cython:
             if CYTHON_AVAILABLE:
+
+                print("Split files using the cython splitter") 
                 cy_splitter(input_handle_R1=input_fastq_1,input_handle_R2=input_fastq_2,
                         output_handles=output_handles,
                         lines_per_block=group_size * 4,
@@ -114,6 +116,7 @@ def key_split_fastqs(input_file_1: Path,input_file_2: Path, output_files: List[P
             else:
                 raise CYTHON_IMPORT_ERROR
         else:  # Use python fallback
+            print("Split files using the python splitter") 
             py_splitter(input_handle_R1=input_fastq_1,input_handle_R2=input_fastq_2,
                         output_handles=output_handles,
                         lines_per_block=group_size * 4,
