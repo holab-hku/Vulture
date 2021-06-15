@@ -130,9 +130,9 @@ def main():
 
     number_of_splits = parsed_args.splits
 
-    output_files = [Path(parsed_args.output) / Path(parsed_args.prefix+"part."+str(_)+".R1"+parsed_args.supfix)
+    output_files = [Path(parsed_args.output) / Path(parsed_args.prefix+"part."+str(_)+".R1"+parsed_args.supfix)\
                 for _ in range(number_of_splits)]
-    output_files += [Path(parsed_args.output) / Path(parsed_args.prefix+"part."+str(_)+".R2"+parsed_args.supfix)
+    output_files += [Path(parsed_args.output) / Path(parsed_args.prefix+"part."+str(_)+".R2"+parsed_args.supfix)\
                 for _ in range(number_of_splits)]
 
     key_split_fastqs(parsed_args.input1,parsed_args.input2,
@@ -154,7 +154,7 @@ def argument_parser() -> argparse.ArgumentParser:
                         required=True,
                         help="Output folder over these output files."
                         )
-    parser.add_argument("-s", "--supfix", action="append", type=str, default=".fastq.gz",
+    parser.add_argument("-s", "--supfix", type=str, default=".fastq.gz",
                         help="The extensions determine "
                              "which compression algorithm will be used. '.gz' "
                              "for gzip, '.bz2' for bzip2, '.xz' for xz. Other "
