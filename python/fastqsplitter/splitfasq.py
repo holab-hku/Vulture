@@ -146,9 +146,9 @@ def main():
 
 def argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-r1", "--input1", type=Path, required=True,
+    parser.add_argument("-r1", "--input1", type=str, required=True,
                         help="The R1 fastq file to be scattered.")
-    parser.add_argument("-r2", "--input2", type=Path, required=True,
+    parser.add_argument("-r2", "--input2", type=str, required=True,
                         help="The R2 fastq file to be scattered.")
     parser.add_argument("-o", "--output", action="append", type=Path,
                         required=True,
