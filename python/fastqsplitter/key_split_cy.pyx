@@ -45,10 +45,16 @@ def keyfilesplitter(input_handle_R1: io.BufferedReader,input_handle_R2: io.Buffe
 
     cdef unsigned int blocksize = lines_per_block
     cdef unsigned int i = 0
+    cdef unsigned int j = 0
+    cdef unsigned int f = 0
     cdef unsigned int group_no = 0
     cdef unsigned int n_files = int(len(output_handles)/2)
+    cdef unsigned int n_outputs = len(output_handles)
+
     cdef unsigned int key_offset = k_offset
     cdef unsigned int key_length = k_length
+
+    blocks = [[] for i in range(n_outputs)]
 
     # for line in handle is the fastest way to read lines in python that I
     # know of. Implementations with next(handle) or handle.readline are
@@ -58,17 +64,30 @@ def keyfilesplitter(input_handle_R1: io.BufferedReader,input_handle_R2: io.Buffe
         temp2.append(input_handle_R2.readline())
 
         i += 1
-        if i == blocksize:
-            group_no = hash(temp1[1][key_offset:key_length])%n_files
-            output_handles[group_no].write(b"".join(temp1))
-            output_handles[group_no+n_files].write(b"".join(temp2))
+        j += 1
 
+        if j == 4:
+            group_no = hash(temp1[1][key_offset:key_length])%n_files
+            blocks[group_no]+=(temp1)
+            blocks[group_no+n_files]+=(temp2)
             temp1 = []  # reset block.
             temp2 = []
+            j = 0
+
+        if i == blocksize:
+            while f < n_outputs:
+                output_handles[f].write(b"".join(blocks[f]))
+                f += 1
+            blocks = [[] for i in range(n_outputs)] # reset block.
+            f = 0
             i = 0
         # This works, if blocksize == 100. Then i will be [0, 1, 2, .., 98, 99]
         # which is exactly 100 numbers.
 
+    while f < n_outputs:
+        output_handles[f].write(b"".join(blocks[f]))
+        f += 1
+    f = 0
     # Write remainder to file. Since stuff is only written at i == blocksize
     # there is a remainder that needs to be written.
 

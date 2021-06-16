@@ -65,7 +65,7 @@ from split_py import keysplitter as py_splitter
 # in this application.
 DEFAULT_COMPRESSION_LEVEL = 1
 # There is no noticable difference in CPU time between 100 and 1000 group size.
-DEFAULT_GROUP_SIZE = 1
+DEFAULT_GROUP_SIZE = 1000
 # With one thread per file (pigz -p 1) pigz uses way less virtual memory
 # (10 vs 300 MB for 4 threads) and total CPU time is also decreased.
 # Example: 2.3 gb input file file. Five output files.
