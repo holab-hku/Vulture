@@ -59,7 +59,7 @@ except ImportError as e:
         CYTHON_AVAILABLE = False
         logging.warning("Cython version is not avaliable, use python code") 
 
-from split_py import keysplitter as py_splitter
+from key_split_py import keysplitter as py_splitter
 
 # Choose 1 as default compression level. Speed is more important than filesize
 # in this application.
