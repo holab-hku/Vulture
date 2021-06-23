@@ -10,6 +10,8 @@ data/
 __pycache__
 *.so
 *.o
+*.c
+*.pyd
 
 *.egg
 *.egg-info
