@@ -5,6 +5,7 @@ output/*
 data/
 !/cellranger/*.sh
 !/kb/*.sh
+!/shell/*.sh
 *.pyc
 *.pyo
 __pycache__
