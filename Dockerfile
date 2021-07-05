@@ -28,7 +28,8 @@ RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificate
     pip install umi_tools && \
     wget https://github.com/alexdobin/STAR/archive/2.7.9a.tar.gz && \
     tar -xzf 2.7.9a.tar.gz && \
-    echo "export PATH=/root/STAR-2.7.9a/bin/Linux_x86_64_static:\$PATH" >> ~/.bashrc && \
+    echo "export PATH=/STAR-2.7.9a/bin/Linux_x86_64_static:\$PATH" >> ~/.bashrc && \
+    . ~/.bashrc && \
     Rscript ~/r/scvh_dependencies.r && \
     pip install boto3 awscli
 
