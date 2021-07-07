@@ -31,7 +31,7 @@ process Map {
     input:
     tuple val(pair_id), file(reads) from read_pairs_ch
     output:
-    file "*/*" into results_ch
+    set file("intermediate_files/"), file('alignment_outs/') into results_ch
     
     shell
     """
