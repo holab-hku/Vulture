@@ -33,5 +33,5 @@ RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificate
     Rscript ~/r/scvh_dependencies.r && \
     pip install boto3 awscli
 
-ENTRYPOINT [ "~/shell.sh"]
+ENTRYPOINT [ "~/shell/arguments.sh"]
 CMD [ "/bin/bash" ]
