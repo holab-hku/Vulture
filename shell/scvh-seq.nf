@@ -2,7 +2,7 @@
 /*
  * pipeline input parameters
  */
-params.reads = "/home/jholab/drive/users/angelayin/input_data/fastq/*_{2,1}.fastq.gz"
+params.reads = "/home/ec2-user/environment/drive/users/angelayin/input_data/fastq/*_{2,1}.fastq.gz"
 params.outdir = "ouput_data"
 params.annotation = "/storage/users/angelayin/input_data/ref"
 params.codebase = "~"
@@ -28,9 +28,7 @@ Channel
  */
 process Map {
     cpus 16
-    executor 'local'
 
-    publishDir "${params.outdir}", mode: "copy", overwrite: "true"
     input:
     tuple val(pair_id), file(reads) from read_pairs_ch
     output:
