@@ -2,11 +2,11 @@
 /*
  * pipeline input parameters
  */
-params.reads = "/home/ec2-user/environment/drive/users/angelayin/input_data/fastq/*_{2,1}.fastq.gz"
+params.reads = "s3://scvh-input-data/fastq/*_{2,1}.fastq.gz"
 params.outdir = "ouput_data"
-params.annotation = "/storage/users/angelayin/input_data/ref"
+params.annotation = "s3://scvh-input-data/ref"
 params.codebase = "~"
-params.baseDir = "/storage/users/angelayin/input_data/fastq"
+params.baseDir = "."
 log.info """\
          SCVH - N F   P I P E L I N E
          ===================================
@@ -28,18 +28,24 @@ Channel
  */
 process Map {
     cpus 16
+    memory '64 GB'
 
     input:
     tuple val(pair_id), file(reads) from read_pairs_ch
+    path ref from params.annotation
     output:
     set file("intermediate_files/"), file('alignment_outs/') into results_ch
     
     shell
     """
+    ls -l
     source ~/.bashrc
-    perl ${params.codebase}/scvh_map_reads.pl -t 10 -r 32 -d "viruSITE" -a "STAR" -o "." \
-    "${params.annotation}" \
+    ls ref
+    perl ${params.codebase}/scvh_map_reads.pl -t 16 -r 32 -d "viruSITE" -a "STAR" -o "." \
+    "${ref}" \
     "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz"
+    ls
+    ls alignment_outs
     """
 }
 
