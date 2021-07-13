@@ -351,7 +351,8 @@ sub run_KB {
 	
 	my $STAR_output_dir = $output_dir . "/alignment_outs/";
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
-	
+	mkdir "$output_dir/kbtemp unless" (-d "$output_dir/kbtemp");
+
 	#my $run_STAR = "STAR --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
 	my $run_KBcount = "$EXE count -x=$technology -g=$genome_dir/transcripts_to_genes.txt -i=$genome_dir/transcriptome.idx -o=$output_dir -t=$threads -m=$ram --tmp=$output_dir/kbtemp --h5ad --mm $R1 $R2";
 
