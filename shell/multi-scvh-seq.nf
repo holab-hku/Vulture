@@ -2,9 +2,9 @@
 /*
  * pipeline input parameters
  */
-params.reads = "s3://scvh-input-data/fastq/*_{2,1}.fastq.gz"
-params.outdir = "ouput_data"
-params.annotation = "s3://scvh-input-data/ref"
+params.reads = "s3://scvhworkflow/input/*_{2,1}.fastq.gz"
+params.outdir = "s3://scvhworkflow/prod/output"
+params.annotation = "s3://scvhworkflow/dev/input/ref"
 params.codebase = "~"
 params.baseDir = "."
 log.info """\
@@ -27,8 +27,6 @@ Channel
  * 1. Mapping
  */
 process Map {
-    cpus 14
-    memory '48 GB'
     input:
     tuple val(pair_id), file(reads) from read_pairs_ch
     path ref from params.annotation
@@ -39,7 +37,7 @@ process Map {
     shell
     """
     source ~/.bashrc
-    perl ${params.codebase}/scvh_map_reads.pl -t 10 -r 32 -d "viruSITE" -a "STAR" -o "." \
+    perl ${params.codebase}/scvh_map_reads.pl -t 14 -r 32 -d "viruSITE" -a "STAR" -o "." \
     "${ref}" \
     "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz"
     """
@@ -53,8 +51,6 @@ process Map {
  * 2. Filter
  */
 process Filter {
-    cpus '14'
-    memory '48 GB'
     publishDir "${params.outdir}/${pair_id}", mode: "copy"
     input:
     file result from results_ch
