@@ -20,6 +20,7 @@ RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificate
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc && \
     echo "umask 000" >> ~/.bashrc && \
+    echo "ulimit -n 4096" >> ~/.bashrc && \
     apt-get install -y curl grep sed dpkg && \
     TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
     curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
