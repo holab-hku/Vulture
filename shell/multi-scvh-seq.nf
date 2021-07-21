@@ -3,7 +3,7 @@
  * pipeline input parameters
  */
 params.reads = "s3://scvhworkflow/input/*_{2,1}.fastq.gz"
-params.outdir = "s3://scvhworkflow/prod/output"
+params.outdir = "s3://scvhworkflow/prod/output/t0"
 params.annotation = "s3://scvhworkflow/dev/input/ref"
 params.codebase = "~"
 params.baseDir = "."
@@ -37,6 +37,8 @@ process Map {
     shell
     """
     source ~/.bashrc
+    df -h
+    pwd
     perl ${params.codebase}/scvh_map_reads.pl -t 14 -r 32 -d "viruSITE" -a "STAR" -o "." \
     "${ref}" \
     "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz"
@@ -61,6 +63,7 @@ process Filter {
     shell
     """
     ls
+    pwd
     Rscript ${params.codebase}/scvh_filter_matrix.r "."
     """
 }
