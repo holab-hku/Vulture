@@ -28,13 +28,17 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_6
     dpkg -i tini.deb && \
     rm tini.deb && \
     apt-get clean && \
-    pip install kb-python && \
-    pip install umi_tools && \
+    pip install kb-python umi_tools velocyto scvelo boto3 awscli && \
     wget https://github.com/alexdobin/STAR/archive/2.7.9a.tar.gz && \
     tar -xzf 2.7.9a.tar.gz && \
     echo "export PATH=/STAR-2.7.9a/bin/Linux_x86_64_static:\$PATH" >> ~/.bashrc && \
-    . ~/.bashrc && \
-    pip install boto3 awscli
-
+    wget https://github.com/samtools/samtools/releases/download/1.13/samtools-1.13.tar.bz2 && \
+    tar -xf samtools-1.13.tar.bz2 && \
+    cd samtools-1.13 && \
+    ./configure --prefix=/opt/samtools && \
+    make && \
+    make install && \
+    echo "export PATH=/opt/samtools/bin:\$PATH" >> ~/.bashrc && \
+    . ~/.bashrc
 ENTRYPOINT [ "/usr/bin/tini","--"]
 CMD [ "/bin/bash" ]
