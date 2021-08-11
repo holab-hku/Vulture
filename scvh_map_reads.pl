@@ -264,12 +264,12 @@ sub run_STAR {
 	my $STAR_output_dir = $output_dir . "/alignment_outs/";
 	mkdir $STAR_output_dir unless (-d $STAR_output_dir);
 
-	my $outSAMattributes = "CR CY CB UR UY UB sM GX GN";
+	my $outSAMattributes = "CR CY CB UR UY UB sM GX GN NH";
 
 	my @strSAMtype = split(" ", $outSAMtype);
 	
 	if( 'Unsorted' ~~ @strSAMtype ){
-		$outSAMattributes = "CR CY UR UY sM GX GN";
+		$outSAMattributes = "CR CY UR UY sM GX GN NH";
 	}
 	#my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
 	my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outSAMtype $outSAMtype --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --readFilesIn $R2 $R1";
