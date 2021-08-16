@@ -2,8 +2,8 @@
 /*
  * pipeline input parameters
  */
-params.reads = "s3://scvhworkflow/input/*_{2,1}.fastq.gz"
-params.outdir = "s3://scvhworkflow/prod/output/t0"
+params.reads = "s3://scvhworkflow/prod/input/*_{2,1}.fastq.gz"
+params.outdir = "s3://scvhworkflow/prod/output/t2-23072021"
 params.annotation = "s3://scvhworkflow/dev/input/ref"
 params.codebase = "~"
 params.baseDir = "."
