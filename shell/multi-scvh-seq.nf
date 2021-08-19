@@ -2,9 +2,9 @@
 /*
  * pipeline input parameters
  */
-params.reads = "s3://scvhworkflow/prod/input/*_{2,1}.fastq.gz"
-params.outdir = "s3://scvhworkflow/prod/output/t2-23072021"
-params.annotation = "s3://scvhworkflow/dev/input/ref"
+params.reads = "s3://scvhwf/samples/storage/holab/covid_scRNA-seq/*_{2,1}.fastq.gz" 
+params.outdir = "s3://scvhwf/prod/output/demo"
+params.annotation = "s3://scvhwf/prod/ref"
 params.codebase = "~"
 params.baseDir = "."
 log.info """\
@@ -39,7 +39,7 @@ process Map {
     source ~/.bashrc
     df -h
     pwd
-    perl ${params.codebase}/scvh_map_reads.pl -t 14 -r 32 -d "viruSITE" -a "STAR" -o "." \
+    perl ${params.codebase}/scvh_map_reads.pl -f GeneFull -t 24 -r 32 -d "viruSITE" -a "STAR" -o "." -ot "BAM Unsorted" \
     "${ref}" \
     "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz"
     """
@@ -58,7 +58,7 @@ process Filter {
     file result from results_ch
     val pair_id from id_ch
     output:
-    set file('*.txt'), file('*.rds') into results2_ch
+    set file('*.txt'), file('*.rds'), file("alignment_outs/Solo.out/") into results2_ch
 
     shell
     """
