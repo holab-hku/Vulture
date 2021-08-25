@@ -44,6 +44,8 @@ check_dirs_files_exist <- function(output_dir) {
 	if (dir.exists(STARsolo_path_to_raw_matrix_path) == FALSE) {
 		# Check if GeneFull option is specified
 		STARsolo_path_to_raw_matrix <- "Solo.out/GeneFull/raw"
+		STARsolo_path_to_raw_matrix_path <- paste0(output_dir,"/",STARsolo_dir_name,"/",STARsolo_path_to_raw_matrix)
+
 		if (dir.exists(STARsolo_path_to_raw_matrix_path) == FALSE){
 			stop(paste0("Can't find ",STARsolo_path_to_raw_matrix_path,", make sure STARsolo output directory structure is unchanged"))
 		}		
