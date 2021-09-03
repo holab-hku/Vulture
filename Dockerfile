@@ -28,7 +28,7 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_6
     dpkg -i tini.deb && \
     rm tini.deb && \
     apt-get clean && \
-    pip install kb-python umi_tools velocyto scvelo boto3 awscli && \
+    pip install kb-python umi_tools velocyto scvelo boto3 awscli leidenalg && \
     wget https://github.com/alexdobin/STAR/archive/2.7.9a.tar.gz && \
     tar -xzf 2.7.9a.tar.gz && \
     echo "export PATH=/STAR-2.7.9a/bin/Linux_x86_64_static:\$PATH" >> ~/.bashrc && \
