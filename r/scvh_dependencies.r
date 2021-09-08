@@ -6,5 +6,5 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 }
 BiocManager::install("DropletUtils",Ncpus=10)
 BiocManager::install(c("Biostrings", "ShortRead","doParallel","GenomicAlignments","Gviz","GenomicFeatures","Rsubread"),Ncpus=10)
-install.packages(c("argparse","Seurat"))
+install.packages(c("argparse","Seurat","harmony"))
 remotes::install_github("mojaveazure/seurat-disk",upgrade="always",Ncpus=10)
