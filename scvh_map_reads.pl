@@ -39,10 +39,10 @@ GetOptions(
 	'ot|outSAMtype=s' => \$outSAMtype,
 	'mm|soloMultiMappers=s' => \$soloMultiMappers,
 	'pseudoBAM' => \$pseudoBAM,
-	'soloCBstart' => \$soloCBstart,
-	'soloCBlen' => \$soloCBlen,
-	'soloUMIstart' => \$soloUMIstart,
-	'soloUMIlen' => \$soloUMIlen
+	'soloCBstart=i' => \$soloCBstart,
+	'soloCBlen=i' => \$soloCBlen,
+	'soloUMIstart=i' => \$soloUMIstart,
+	'soloUMIlen=i' => \$soloUMIlen
 
 ) or die_usage();
 
