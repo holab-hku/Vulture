@@ -19,6 +19,10 @@ my $pseudoBAM = "";
 my $soloMultiMappers  = "EM";
 my $soloFeatures = "Gene";
 my $outSAMtype = "BAM SortedByCoordinate";
+my $soloCBstart = 1;
+my $soloCBlen = 16;
+my $soloUMIstart = 17;
+my $soloUMIlen = 10;
 my $EXE = "";
 
 GetOptions(
@@ -35,6 +39,10 @@ GetOptions(
 	'ot|outSAMtype=s' => \$outSAMtype,
 	'mm|soloMultiMappers=s' => \$soloMultiMappers,
 	'pseudoBAM' => \$pseudoBAM,
+	'soloCBstart' => \$soloCBstart,
+	'soloCBlen' => \$soloCBlen,
+	'soloUMIstart' => \$soloUMIstart,
+	'soloUMIlen' => \$soloUMIlen
 
 ) or die_usage();
 
@@ -74,6 +82,10 @@ Options:                                                                        
 -mm/--soloMultiMappers <string>  STARsolo param:  See --soloMultiMappers in STARsolo manual                                              [<$soloMultiMappers>]
 -a/--alignment <string>    Select alignment methods: 'STAR', 'KB', 'Alevin', or 'CellRanger'                                             [<$alignment>]
 -v/--technology <string>   KB param:  Single-cell technology used (`kb --list` to view)                                                  [<$technology>]
+--soloCBstart <string>  STARsolo param:  See --soloCBstart in STARsolo manual                                                            [<$soloCBstart>]
+--soloCBlen <string>  STARsolo param:  See --soloCBlen in STARsolo manual                                                                [<$soloCBlen>]
+--soloUMIstart <string>  STARsolo param:  See --soloUMIstart in STARsolo manual                                                          [<$soloUMIstart>]
+--soloUMIlen <string>  STARsolo param:  See --soloUMIlen in STARsolo manual                                                              [<$soloUMIlen>]
 ";
 }
 
@@ -272,7 +284,11 @@ sub run_STAR {
 		$outSAMattributes = "CR CY UR UY sM GX GN NH";
 	}
 	#my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
-	my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outSAMtype $outSAMtype --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --readFilesIn $R2 $R1";
+	my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outSAMtype $outSAMtype --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir 
+	--sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand 
+	--soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype 
+	--soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen 
+	--soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --readFilesIn $R2 $R1";
 
 	system("$run_STAR");
 	
