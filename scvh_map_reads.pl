@@ -19,6 +19,8 @@ my $pseudoBAM = "";
 my $soloMultiMappers  = "EM";
 my $soloFeatures = "Gene";
 my $outSAMtype = "BAM SortedByCoordinate";
+my $soloInputSAMattrBarcodeSeq = "CR UR";
+my $soloInputSAMattrBarcodeQual = "-";
 my $soloCBstart = 1;
 my $soloCBlen = 16;
 my $soloUMIstart = 17;
@@ -46,7 +48,14 @@ GetOptions(
 
 ) or die_usage();
 
-die_usage() unless @ARGV == 3;
+# Change by JY to fit the .bam file input
+#die_usage() unless @ARGV == 3;
+
+if(@ARGV == 2){
+   die_usage() unless index($ARGV[1], ".bam")>0;
+}else{
+   die_usage() unless @ARGV == 3;
+}
 
 #my ($genome_dir, $R2, $R1) = @ARGV;
 $genome_dir = $ARGV[0];
@@ -67,7 +76,7 @@ if($EXE eq "") {
 
 sub die_usage {
 die "
-Usage: scvh_map_reads.pl [Options] <vmh_genome_dir> <R2> <R1>
+Usage: scvh_map_reads.pl [Options] <vmh_genome_dir> <R2> <R1> or <vmh_genome_dir> <.bam file>
 
 Options:                                                                                                                                Defaults
 -o/--output-dir	<string>   the output directory                                                                                          [./]
@@ -284,8 +293,17 @@ sub run_STAR {
 		$outSAMattributes = "CR CY UR UY sM GX GN NH";
 	}
 	#my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --outSAMtype BAM SortedByCoordinate --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes CR CY CB UR UY UB sM GX GN --readFilesIn $R2 $R1";
-	my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --readFilesIn $R2 $R1";
-	system("$run_STAR");
+	
+	if(index($ARGV[1], ".bam")>0){
+
+		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand samtools view -F 0x100 --readFilesType SAM SE --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --soloInputSAMattrBarcodeSeq $soloInputSAMattrBarcodeSeq --soloInputSAMattrBarcodeQual $soloInputSAMattrBarcodeQual --readFilesIn $R2";
+		system("$run_STAR");
+
+
+	}else{
+		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --readFilesIn $R2 $R1";
+		system("$run_STAR");
+	}
 	
 	#analyze_BAM($STAR_output_dir);
 }
