@@ -267,17 +267,26 @@ sub analyze_BAM {
 
 sub run_STAR {
 	
-	for my $R ($R2, $R1) {
-		unless ( (-e $R) && (-s $R) ) {
-			die "$R is not present or is empty\n";
+	if(($R2 =~ /.*\.bam$/)){
+		unless ( (-e $R2) && (-s $R2) ) {
+			die "$R2 is not present or is empty\n";
+		}
+	}else{
+		for my $R ($R2, $R1) {
+			unless ( (-e $R) && (-s $R) ) {
+				die "$R is not present or is empty\n";
+			}
 		}
 	}
-	
+
 	my $readFilesCommand;
 	
 	if ( ($R2 =~ /.*\.gz$/) && ($R1 =~ /.*\.gz$/) ) {
 		$readFilesCommand = "zcat";
-	} else {
+	} elsif(($R2 =~ /.*\.bam$/)){
+		$readFilesCommand = "samtools view -F 0x100";
+	}
+	else {
 		print ".gz not detected in file suffix of both R1 and R2, will assume both are uncompressed.\n";
 		$readFilesCommand = "-";
 	}
@@ -296,7 +305,7 @@ sub run_STAR {
 	
 	if(index($ARGV[1], ".bam")>0){
 
-		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand samtools view -F 0x100 --readFilesType SAM SE --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --soloInputSAMattrBarcodeSeq $soloInputSAMattrBarcodeSeq --soloInputSAMattrBarcodeQual $soloInputSAMattrBarcodeQual --readFilesIn $R2";
+		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --readFilesType SAM SE --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --soloInputSAMattrBarcodeSeq $soloInputSAMattrBarcodeSeq --soloInputSAMattrBarcodeQual $soloInputSAMattrBarcodeQual --readFilesIn $R2";
 		system("$run_STAR");
 
 
