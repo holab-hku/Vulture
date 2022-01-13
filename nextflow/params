@@ -1,0 +1,17 @@
+params.soloCBlen=16;
+params.soloCBstart=1;
+params.soloUMIstart=17;
+params.soloUMIlen=10;
+params.soloStrand="Forward";
+params.barcodes_whitelist="s3://scvhwf/prod/ref/STAR/737K-august-2016.txt";
+params.threads=28;
+params.ram = 64;
+params.alignment = "STAR";
+params.technology = "10XV2";
+params.virus_database = "viruSITE";
+params.pseudoBAM = "";
+params.soloMultiMappers  = "EM";
+params.soloFeatures = "Gene";
+params.outSAMtype = "BAM SortedByCoordinate";
+params.soloInputSAMattrBarcodeSeq = "CR UR";
+params.soloInputSAMattrBarcodeQual = "-";
