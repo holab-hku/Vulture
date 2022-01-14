@@ -5,7 +5,7 @@
 params.reads = "s3://scvh-input-data/fastq/*_{2,1}.fastq.gz"
 params.outdir = "ouput_data"
 params.annotation = "s3://scvh-input-data/ref"
-params.codebase = "~"
+params.codebase = "/code"
 params.baseDir = "."
 log.info """\
          SCVH - N F   P I P E L I N E

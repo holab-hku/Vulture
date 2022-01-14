@@ -6,7 +6,7 @@ params.baseDir = "."
 params.reads = "s3://sra-pub-sars-cov2/sra-src/SRR11537951/*_R{2,1}.fastq.gz" 
 params.ref = "s3://scvhwf/prod/ref/STAR"
 params.outdir = "s3://scvhwf/prod/output/demo"
-params.codebase = "~"
+params.codebase = "/code"
 log.info """\
          S C V H - N F   P I P E L I N E
          ===================================

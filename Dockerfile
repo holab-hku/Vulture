@@ -6,15 +6,17 @@ FROM r-base:4.0.3
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH /opt/conda/bin:$PATH
 ENV DEBIAN_FRONTEND=noninteractive 
+ENV PATH=/opt/samtools/bin:$PATH
+ENV PATH=/STAR-2.7.9a/bin/Linux_x86_64_static:$PATH
 
-COPY . /root
+COPY . /code
 
 RUN apt-get update --fix-missing && \
     apt-get install -y wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 curl grep sed dpkg libcurl4-openssl-dev libssl-dev libhdf5-dev \
     git mercurial subversion procps
 
-RUN Rscript ~/r/scvh_dependencies.r
+RUN Rscript /code/r/scvh_dependencies.r
 
 RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
@@ -41,6 +43,7 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_6
     make && \
     make install && \
     echo "export PATH=/opt/samtools/bin:\$PATH" >> ~/.bashrc && \
-    . ~/.bashrc
+    . ~/.bashrc && \
+    chmod 755 /code
 ENTRYPOINT [ "/usr/bin/tini","--"]
 CMD [ "/bin/bash" ]

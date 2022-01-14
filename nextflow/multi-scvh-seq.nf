@@ -5,7 +5,7 @@
 params.reads = "s3://scvhwf/samples/storage/holab/covid_scRNA-seq/*_{2,1}.fastq.gz" 
 params.outdir = "s3://scvhwf/prod/output/demo"
 params.annotation = "s3://scvhwf/prod/ref"
-params.codebase = "~"
+params.codebase = "/code"
 params.baseDir = "."
 log.info """\
          SCVH - N F   P I P E L I N E - MULTI
