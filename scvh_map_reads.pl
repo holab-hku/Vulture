@@ -86,7 +86,7 @@ Options:                                                                        
 -s/--soloStrand <string>   STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively                               [<$soloStrand>]
 -w/--whitelist <string>    STARsolo param --soloCBwhitelist                                                                              [<$barcodes_whitelist>]
 -r/--ram <int>             limitation of RAM usage. For STARsolo, param: limitGenomeGenerateRAM unit by GB                               [<$ram>]
--f/--soloFeatures <string> STARsolo param:  See --soloFeatures in STARsolo manual                                                        [<$soloFeatures>]
+-f/--soloFeature <string> STARsolo param:  See --soloFeatures in STARsolo manual                                                        [<$soloFeatures>]
 -ot/--outSAMtype <string>  STARsolo param:  See --outSAMtype in STARsolo manual                                                          [<$outSAMtype>]
 -mm/--soloMultiMappers <string>  STARsolo param:  See --soloMultiMappers in STARsolo manual                                              [<$soloMultiMappers>]
 -a/--alignment <string>    Select alignment methods: 'STAR', 'KB', 'Alevin', or 'CellRanger'                                             [<$alignment>]
