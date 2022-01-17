@@ -3,7 +3,7 @@
  * pipeline input parameters
  */
 params.baseDir = "."
-params.codebase = "/code"
+params.codebase = "~"
 params.soloCBlen = 16;
 params.soloCBstart = 1;
 params.soloUMIstart = 17;
@@ -20,6 +20,7 @@ params.soloFeatures = "Gene";
 params.outSAMtype = "BAM SortedByCoordinate";
 params.soloInputSAMattrBarcodeSeq = "CR UR";
 params.soloInputSAMattrBarcodeQual = "-";
+params.barcodes_whitelist = "737K-august-2016.txt"
 
 
 log.info """\
@@ -70,7 +71,7 @@ process Map {
     --database ${params.virus_database} \
     --threads ${params.threads} --ram ${params.ram} \
     --alignment ${params.alignment} \
-    --whitelist ${params.barcodes_whitelist} \
+    --whitelist "${ref}/${params.barcodes_whitelist}" \
     --soloCBlen ${params.soloCBlen} --soloCBstart ${params.soloCBstart} \
     --soloUMIstart ${params.soloUMIstart} --soloUMIlen ${params.soloUMIlen} \
     --soloStrand ${params.soloStrand} \
