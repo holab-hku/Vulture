@@ -15,7 +15,7 @@ params.alignment = "STAR";
 params.technology = "10XV2";
 params.virus_database = "viruSITE";
 params.pseudoBAM = "";
-params.soloMultiMappers  = "EM";
+params.soloMultiMappers = "EM";
 params.soloFeatures = "Gene";
 params.outSAMtype = "BAM SortedByCoordinate";
 params.soloInputSAMattrBarcodeSeq = "CR UR";
@@ -92,7 +92,6 @@ process Map {
     --alignment ${params.alignment} \
     --technology ${params.technology} \
     --soloFeature ${params.soloFeatures} \
-    --outSAMtype ${params.outSAMtype} \
     --soloMultiMappers ${params.soloMultiMappers} \
     --pseudoBAM ${params.pseudoBAM} \
     --soloCBlen ${params.soloCBlen} \
