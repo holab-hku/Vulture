@@ -1,6 +1,7 @@
 *.sh
 *.output
 output/*
+*.nextflow.log.*
 .ipynb_checkpoints/
 data/
 !/cellranger/*.sh
@@ -18,6 +19,10 @@ __pycache__
 *.egg-info
 .*cache*/
 *venv*/
+nextflow/work
+nextflow/.nextflow.log.*
+nextflow/.nextflow*
+nextflow/report.html*
 
 Cython/Compiler/*.c
 Cython/Plex/*.c

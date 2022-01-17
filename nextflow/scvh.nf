@@ -3,10 +3,25 @@
  * pipeline input parameters
  */
 params.baseDir = "."
-params.reads = "s3://sra-pub-sars-cov2/sra-src/SRR11537951/*_R{2,1}.fastq.gz" 
-params.ref = "s3://scvhwf/prod/ref/STAR"
-params.outdir = "s3://scvhwf/prod/output/demo"
 params.codebase = "/code"
+params.soloCBlen = 16;
+params.soloCBstart = 1;
+params.soloUMIstart = 17;
+params.soloUMIlen = 10;
+params.soloStrand = "Forward";
+params.threads = 28;
+params.ram = 64;
+params.alignment = "STAR";
+params.technology = "10XV2";
+params.virus_database = "viruSITE";
+params.pseudoBAM = "";
+params.soloMultiMappers  = "EM";
+params.soloFeatures = "Gene";
+params.outSAMtype = "BAM SortedByCoordinate";
+params.soloInputSAMattrBarcodeSeq = "CR UR";
+params.soloInputSAMattrBarcodeQual = "-";
+
+
 log.info """\
          S C V H - N F   P I P E L I N E
          ===================================
@@ -40,27 +55,34 @@ process Map {
     
     shell
     """
-    source ~/.bashrc
-    perl ${params.codebase}/scvh_map_reads.pl \
-    --virus_database ${params.virus_database} \
-    --threads ${params.threads} --ram ${params.ram} \
-    --alignment ${params.alignment} \
-    -o "." \
-    --barcodes_whitelist ${params.barcodes_whitelist} \
-    --soloCBlen ${params.soloCBlen} --soloCBstart ${params.soloCBstart} \
-    --soloUMIstart ${params.soloUMIstart} --soloUMIlen ${params.soloUMIlen} \
-    --soloStrand ${params.soloStrand} \
-    --soloMultiMappers ${params.soloMultiMappers} \
-    --soloFeatures ${params.soloFeatures} \
-    --outSAMtype ${params.outSAMtype} \
-    --soloInputSAMattrBarcodeSeq ${params.soloInputSAMattrBarcodeSeq} \
-    --soloInputSAMattrBarcodeQual ${params.soloInputSAMattrBarcodeQual} \ 
-    --technology ${params.technology} \
-    --pseudoBAM ${params.pseudoBAM} \
+    ls -l ref
+    cd ref 
+    ls .
+    cd ../
+    perl ${params.codebase}/scvh_map_reads.pl -f GeneFull -t 24 -r 32 -d "viruSITE" -a "STAR" -o "." -ot "BAM Unsorted" \
     "${ref}" \
-    "${params.baseDir}/${pair_id}_R2.fastq.gz" "${params.baseDir}/${pair_id}_R1.fastq.gz";
-    rm ./alignment_outs/*.bam
+    "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz"
+
     """
+    // """
+    // perl ${params.codebase}/scvh_map_reads.pl \
+    // --database ${params.virus_database} \
+    // --threads ${params.threads} --ram ${params.ram} \
+    // --alignment ${params.alignment} \
+    // -o "." \
+    // --whitelist ${params.barcodes_whitelist} \
+    // --soloCBlen ${params.soloCBlen} --soloCBstart ${params.soloCBstart} \
+    // --soloUMIstart ${params.soloUMIstart} --soloUMIlen ${params.soloUMIlen} \
+    // --soloStrand ${params.soloStrand} \
+    // --soloMultiMappers ${params.soloMultiMappers} \
+    // --soloFeature ${params.soloFeatures} \
+    // --outSAMtype ${params.outSAMtype} \
+    // --technology ${params.technology} \
+    // --pseudoBAM ${params.pseudoBAM} \
+    // "${ref}" \
+    // "${params.baseDir}/${pair_id}_R2.fastq.gz" "${params.baseDir}/${pair_id}_R1.fastq.gz";
+    // rm ./alignment_outs/*.bam
+    // """
 }
 /*
  * 2. Filter
