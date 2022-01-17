@@ -33,7 +33,7 @@ log.info """\
          threads      : ${params.threads} 
          ram          : ${params.ram} 
          alignment    : ${params.alignment} 
-         whitelist    : ${ref}/${params.barcodes_whitelist} 
+         whitelist    : ${params.barcodes_whitelist} 
          soloCBlen    : ${params.soloCBlen} 
          soloCBstart  : ${params.soloCBstart} 
          soloUMIstart : ${params.soloUMIstart} 
