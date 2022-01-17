@@ -54,35 +54,36 @@ process Map {
     set file("intermediate_files/"), file('alignment_outs/') into results_ch
     
     shell
-    """
-    ls -l ref
-    cd ref 
-    ls .
-    cd ../
-    perl ${params.codebase}/scvh_map_reads.pl -f GeneFull -t 24 -r 32 -d "viruSITE" -a "STAR" -o "." -ot "BAM Unsorted" \
-    "${ref}" \
-    "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz"
+    // """
 
-    """
-    // """
-    // perl ${params.codebase}/scvh_map_reads.pl \
-    // --database ${params.virus_database} \
-    // --threads ${params.threads} --ram ${params.ram} \
-    // --alignment ${params.alignment} \
-    // -o "." \
-    // --whitelist ${params.barcodes_whitelist} \
-    // --soloCBlen ${params.soloCBlen} --soloCBstart ${params.soloCBstart} \
-    // --soloUMIstart ${params.soloUMIstart} --soloUMIlen ${params.soloUMIlen} \
-    // --soloStrand ${params.soloStrand} \
-    // --soloMultiMappers ${params.soloMultiMappers} \
-    // --soloFeature ${params.soloFeatures} \
-    // --outSAMtype ${params.outSAMtype} \
-    // --technology ${params.technology} \
-    // --pseudoBAM ${params.pseudoBAM} \
+    // ls -l ref
+    // cd ref 
+    // ls .
+    // cd ../
+    // perl ${params.codebase}/scvh_map_reads.pl -f GeneFull -t 24 -r 32 -d "viruSITE" -a "STAR" -o "." -ot "BAM Unsorted" \
     // "${ref}" \
-    // "${params.baseDir}/${pair_id}_R2.fastq.gz" "${params.baseDir}/${pair_id}_R1.fastq.gz";
-    // rm ./alignment_outs/*.bam
+    // "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz"
+
     // """
+    """
+    perl ${params.codebase}/scvh_map_reads.pl \
+    --database ${params.virus_database} \
+    --threads ${params.threads} --ram ${params.ram} \
+    --alignment ${params.alignment} \
+    --whitelist ${params.barcodes_whitelist} \
+    --soloCBlen ${params.soloCBlen} --soloCBstart ${params.soloCBstart} \
+    --soloUMIstart ${params.soloUMIstart} --soloUMIlen ${params.soloUMIlen} \
+    --soloStrand ${params.soloStrand} \
+    --soloMultiMappers ${params.soloMultiMappers} \
+    --soloFeatures ${params.soloFeatures} \
+    --outSAMtype ${params.outSAMtype} \
+    --technology ${params.technology} \
+    --pseudoBAM ${params.pseudoBAM} \
+    --output-dir "." \
+    "${ref}" \
+    "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz";
+    rm ./alignment_outs/*.bam
+    """
 }
 /*
  * 2. Filter
