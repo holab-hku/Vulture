@@ -271,7 +271,11 @@ sub run_STAR {
 		unless ( (-e $R2) && (-s $R2) ) {
 			die "$R2 is not present or is empty\n";
 		}
-	}else{
+	}elsif(($R2 =~ /.*\,$/)){
+		print "multi lane is applied";
+	}
+	else{
+		
 		for my $R ($R2, $R1) {
 			unless ( (-e $R) && (-s $R) ) {
 				die "$R is not present or is empty\n";
