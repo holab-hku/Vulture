@@ -1,4 +1,4 @@
-FROM r-base:4.0.3
+FROM r-base:4.1.0
 #  $ docker build . -t continuumio/anaconda3:latest -t continuumio/anaconda3:5.3.0
 #  $ docker run --rm -it continuumio/anaconda3:latest /bin/bash
 #  $ docker push continuumio/anaconda3:latest
@@ -8,15 +8,29 @@ ENV PATH /opt/conda/bin:$PATH
 ENV DEBIAN_FRONTEND=noninteractive 
 ENV PATH=/opt/samtools/bin:$PATH
 ENV PATH=/STAR-2.7.9a/bin/Linux_x86_64_static:$PATH
+ENV PATH="/opt/sratoolkit.2.11.0-ubuntu64/bin/:${PATH}"
 
 COPY . /code
 
 RUN apt-get update --fix-missing && \
     apt-get install -y wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 curl grep sed dpkg libcurl4-openssl-dev libssl-dev libhdf5-dev \
-    git mercurial subversion procps
+    git mercurial subversion procps \
+    libxml-libxml-perl pigz awscli uuid-runtime time
 
 RUN Rscript /code/r/scvh_dependencies.r
+
+RUN wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.11.0/sratoolkit.2.11.0-ubuntu64.tar.gz -O /tmp/sratoolkit.tar.gz \
+	&& tar zxvf /tmp/sratoolkit.tar.gz -C /opt/ && rm /tmp/sratoolkit.tar.gz
+RUN mkdir -p /root/.ncbi
+RUN printf '/LIBS/GUID = "%s"\n' `uuidgen` > /root/.ncbi/user-settings.mkfg
+RUN printf '/repository/user/ad/public/apps/file/volumes/flatAd = "."\n' >> /root/.ncbi/user-settings.mkfg
+RUN printf '/repository/user/ad/public/apps/refseq/volumes/refseqAd = "."\n' >> /root/.ncbi/user-settings.mkfg
+RUN printf '/repository/user/ad/public/apps/sra/volumes/sraAd = "."\n' >> /root/.ncbi/user-settings.mkfg
+RUN printf '/repository/user/ad/public/apps/sraPileup/volumes/ad = "."\n' >> /root/.ncbi/user-settings.mkfg
+RUN printf '/repository/user/ad/public/apps/sraRealign/volumes/ad = "."\n' >> /root/.ncbi/user-settings.mkfg
+RUN printf '/repository/user/ad/public/apps/wgs/volumes/wgsAd = "."\n' >> /root/.ncbi/user-settings.mkfg
+RUN printf '/repository/user/ad/public/root = "."\n' >> /root/.ncbi/user-settings.mkfg
 
 RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
