@@ -50,7 +50,7 @@ log.info """\
 
 
 Channel
-    .fromFilePairs( params.reads )
+    .fromList( params.reads )
     .ifEmpty { error "Cannot find any reads matching: ${params.reads}" }
     .view()
     .set { read_pairs_ch }
@@ -64,18 +64,18 @@ process Dump {
     errorStrategy 'retry'
     maxRetries 3
     input:
-    val(params.reads)
+    val pair_id from read_pairs_ch
     output:
     set file('*_1.fastq.gz'), file('*_2.fastq.gz') into results3_ch
-    val params.reads into id_ch3
+    val pair_id into id_ch3
 
     shell
     """
-    echo "Start to dump fastq files from .sra files: ${params.reads}";
-    fasterq-dump --split-files -e ${params.dumpT} ${params.reads};
+    echo "Start to dump fastq files from .sra files: ${pair_id}";
+    fasterq-dump --split-files -e ${params.dumpT} ${pair_id};
     echo "Dump finished";
-    pigz -p 16 ${params.reads}_1.fastq ;
-    pigz -p 16 ${params.reads}_2.fastq ;
+    pigz -p 16 ${pair_id}_1.fastq ;
+    pigz -p 16 ${pair_id}_2.fastq ;
     echo "Compression finished";
     """
 }
@@ -147,5 +147,6 @@ process Filter {
     shell
     """
     Rscript ${params.codebase}/scvh_filter_matrix.r "."
+    perl ${params.codebase}/scvh_analyze_bam.pl "."
     """
 }
