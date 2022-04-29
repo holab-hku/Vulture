@@ -1,19 +1,24 @@
-params.soloCBlen = 16;
-params.soloCBstart = 1;
-params.soloUMIstart = 17;
-params.soloUMIlen = 10;
-params.soloStrand = "Forward";
-params.barcodes_whitelist = "/home/d24h_prog5/angelayin/input_data/ref/737K-august-2016.txt";
-params.threads = 28;
-params.ram = 64;
-params.alignment = "STAR";
-params.technology = "10XV2";
-params.virus_database = "viruSITE";
-params.pseudoBAM = "";
-params.soloMultiMappers  = "EM";
-params.soloFeatures = "Gene";
-params.outSAMtype = "BAM SortedByCoordinate";
-params.soloInputSAMattrBarcodeSeq = "CR UR";
-params.soloInputSAMattrBarcodeQual = "-";
-params.reads = "/home/d24h_prog5/data/COV19/SRR11537951_{2,1}.fastq.gz";
-params.annotation = "/home/d24h_prog5/angelayin/input_data/ref";
+baseDir: "."
+codebase: "/code"
+soloCBlen: 16
+soloCBstart: 1
+soloUMIstart: 17
+soloUMIlen: 12
+dumpT: 12
+soloStrand: "Forward"
+threads: 16
+ram: 64
+alignment: "STAR"
+technology: "10XV2"
+virus_database: "viruSITE"
+pseudoBAM: ""
+soloMultiMappers: "EM"
+soloFeatures: "GeneFull"
+outSAMtype: "BAM SortedByCoordinate"
+soloInputSAMattrBarcodeSeq: "CR UR"
+soloInputSAMattrBarcodeQual: "-"
+barcodes_whitelist: "3M-february-2018.txt"
+reads:
+- "SRR12570202"
+- "SRR12570203"
+- "SRR12570204"

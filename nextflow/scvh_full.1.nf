@@ -60,12 +60,14 @@ Channel
  */
 process Dump {
     cpus 16
-    memory '16 GB'
+    memory '32 GB'
+    errorStrategy 'retry'
+    maxRetries 3
     input:
     val pair_id from read_pairs_ch
     output:
-    set file('*_1.fastq.gz'), file('*_2.fastq.gz') into results_ch1
-    val pair_id into id_ch1
+    set file('*_1.fastq.gz'), file('*_2.fastq.gz') into results3_ch
+    val pair_id into id_ch3
 
     shell
     """
@@ -88,13 +90,12 @@ process Map {
     memory '128 GB'
 
     input:
-    file result from results_ch1
-    val pair_id from id_ch1
+    file result from results3_ch
+    val pair_id from id_ch3
     path ref from params.ref
     output:
-    file("${pair_id}/") into results_ch2
-    val pair_id into id_ch2
-
+    set file("intermediate_files/"), file('alignment_outs/') into results4_ch
+    
     shell
     // """
 
@@ -108,12 +109,8 @@ process Map {
 
     // """
     """
-    echo "Make output dir"
-    mkdir ${pair_id}
-    ls
-    echo "Alignment"
     perl ${params.codebase}/scvh_map_reads.pl \
-    --output-dir "${pair_id}" \
+    --output-dir "." \
     --threads ${params.threads} \
     --ram ${params.ram} \
     --database ${params.virus_database} \
@@ -142,17 +139,13 @@ process Filter {
     cpus 8
     memory '32 GB'
     input:
-    file result from results_ch2
-    val pair_id from id_ch2
-
+    file result from results4_ch
     output:
-    file('${pair_id}/') into results5_ch
+    set file('*.txt'), file('*.rds') into results5_ch
     
     shell
     """
-    echo "Filter"
-    Rscript ${params.codebase}/scvh_filter_matrix.r "${pair_id}"
-    echo "Analysis bam"
-    perl ${params.codebase}/scvh_analyze_bam.pl "${pair_id}"
+    Rscript ${params.codebase}/scvh_filter_matrix.r "."
+    perl ${params.codebase}/scvh_analyze_bam.pl "."
     """
 }
