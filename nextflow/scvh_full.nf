@@ -169,7 +169,7 @@ process Analysis {
     publishDir "${params.outdir}", mode: "copy",overwrite: true
     cpus 4
     memory '16 GB'
-    errorStrategy 'retry'
+    errorStrategy 'ignore'
     maxRetries 3
     input:
     file result from results_ch_fil
