@@ -56,7 +56,7 @@ Channel
     .set { read_pairs_ch }
 
 /*
- * 2. Dump
+ * 1. Dump
  */
 process Dump {
     cpus 16
@@ -64,8 +64,8 @@ process Dump {
     input:
     val pair_id from read_pairs_ch
     output:
-    set file('*_1.fastq.gz'), file('*_2.fastq.gz') into results_ch1
-    val pair_id into id_ch1
+    set file('*_1.fastq.gz'), file('*_2.fastq.gz') into results_ch_dump
+    val pair_id into id_ch_dump
 
     shell
     """
@@ -79,7 +79,7 @@ process Dump {
 }
     
 /*
- * 4. Mapping 
+ * 2. Mapping 
  */
 process Map {
 
@@ -88,30 +88,19 @@ process Map {
     memory '128 GB'
 
     input:
-    file result from results_ch1
-    val pair_id from id_ch1
+    file result from results_ch_dump
+    val pair_id from id_ch_dump
     path ref from params.ref
     output:
-    file("${pair_id}/") into results_ch2
-    val pair_id into id_ch2
-
+    file("${pair_id}/") into results_ch_map
+    val pair_id into id_ch_map
+    
     shell
-    // """
-
-    // ls -l ref
-    // cd ref 
-    // ls .
-    // cd ../
-    // perl ${params.codebase}/scvh_map_reads.pl -f GeneFull -t 24 -r 128 -d "viruSITE" -a "STAR" -o "." -ot "BAM Unsorted" \
-    // "${ref}" \
-    // "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz"
-
-    // """
     """
-    echo "Make output dir"
+    echo "Make output dir ${pair_id}"
     mkdir ${pair_id}
     ls
-    echo "Alignment"
+    echo "Alignment ${pair_id}"
     perl ${params.codebase}/scvh_map_reads.pl \
     --output-dir "${pair_id}" \
     --threads ${params.threads} \
@@ -134,25 +123,50 @@ process Map {
     """
 }
 /*
- * 5. Filter
+ * 3. Filter
  */
 process Filter {
-    publishDir "${params.outdir}", mode: "copy"
-    
-    cpus 8
-    memory '32 GB'
+    publishDir "${params.outdir}", mode: "copy",overwrite: true
+    errorStrategy 'retry'
+    maxRetries 3
+
+    cpus 4
+    memory '16 GB'
     input:
-    file result from results_ch2
-    val pair_id from id_ch2
+    file result from results_ch_map
+    val pair_id from id_ch_map
 
     output:
-    file('${pair_id}/') into results5_ch
+    file("${pair_id}/") into results_ch_fil
+    val pair_id into id_ch_fil
+
+    shell
+    """
+    ls
+    echo "Filter output dir ${pair_id}"
+    Rscript ${params.codebase}/scvh_filter_matrix.r "${pair_id}"
+    """
+}
+/*
+ * 4. Analysis
+ */
+process Analysis {
+    publishDir "${params.outdir}", mode: "copy",overwrite: true
+    cpus 4
+    memory '16 GB'
+    errorStrategy 'retry'
+    maxRetries 3
+    input:
+    file result from results_ch_fil
+    val pair_id from id_ch_fil
+
+    output:
+    file("${pair_id}/") into results_ch4
     
     shell
     """
-    echo "Filter"
-    Rscript ${params.codebase}/scvh_filter_matrix.r "${pair_id}"
-    echo "Analysis bam"
+    ls
+    echo "Analysis bam in the output dir ${pair_id}"
     perl ${params.codebase}/scvh_analyze_bam.pl "${pair_id}"
     """
 }
