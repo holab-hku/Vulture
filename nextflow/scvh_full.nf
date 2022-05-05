@@ -4,16 +4,11 @@
  */
 params.baseDir = "."
 params.codebase = "/code"
-params.soloCBlen = 16;
-params.soloCBstart = 1;
-params.soloUMIstart = 17;
-params.soloUMIlen = 10;
 params.dumpT = 12;
 params.soloStrand = "Forward";
 params.threads = 16;
 params.ram = 64;
 params.alignment = "STAR";
-params.technology = "10XV2";
 params.virus_database = "viruSITE";
 params.pseudoBAM = "";
 params.soloMultiMappers = "EM";
@@ -21,7 +16,27 @@ params.soloFeatures = "GeneFull";
 params.outSAMtype = "BAM SortedByCoordinate";
 params.soloInputSAMattrBarcodeSeq = "CR UR";
 params.soloInputSAMattrBarcodeQual = "-";
-params.barcodes_whitelist = "737K-august-2016.txt"
+params.technology = "10XV2";
+if(params.technology == "10XV2"){
+    params.soloCBlen = 16;
+    params.soloCBstart = 1;
+    params.soloUMIstart = 17;
+    params.soloUMIlen = 10;
+    params.barcodes_whitelist = "737K-august-2016.txt"
+}else if(params.technology == "10XV3"){
+    params.soloCBlen = 16;
+    params.soloCBstart = 1;
+    params.soloUMIstart = 17;
+    params.soloUMIlen = 12;
+    params.barcodes_whitelist = "3M-february-2018.txt"
+}else{
+    params.soloCBlen = 16;
+    params.soloCBstart = 1;
+    params.soloUMIstart = 17;
+    params.soloUMIlen = 10;
+    params.barcodes_whitelist = "737K-august-2016.txt"
+}
+
 
 
 log.info """\
@@ -85,7 +100,7 @@ process Map {
 
     publishDir "${params.outdir}", mode: "copy"
     cpus 16
-    memory '128 GB'
+    memory '100 GB'
 
     input:
     file result from results_ch_dump
