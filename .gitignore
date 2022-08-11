@@ -76,3 +76,5 @@ MANIFEST
 
 # Visual Studio Code files
 .vscode
+*.html*
+*.yaml

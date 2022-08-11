@@ -78,10 +78,11 @@ process Map {
     // cd ../
     // perl ${params.codebase}/scvh_map_reads.pl -f GeneFull -t 24 -r 32 -d "viruSITE" -a "STAR" -o "." -ot "BAM Unsorted" \
     // "${ref}" \
-    // "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz"
+    // "${params.baseDir}/${pair_id}_R2.fastq.gz" "${params.baseDir}/${pair_id}_R1.fastq.gz"
 
     // """
     """
+    ls
     perl ${params.codebase}/scvh_map_reads.pl \
     --output-dir "." \
     --threads ${params.threads} \

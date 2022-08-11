@@ -76,6 +76,8 @@ Channel
 process Dump {
     cpus 16
     memory '16 GB'
+    queue 'jy-scvh-queue-r5a4x-1'
+
     input:
     val pair_id from read_pairs_ch
     output:
@@ -85,8 +87,10 @@ process Dump {
     shell
     """
     echo "Start to dump fastq files from .sra files: ${pair_id}";
-    fasterq-dump --split-files -v -e ${params.dumpT} ${pair_id};
+    fasterq-dump --split-files -e ${params.dumpT} ${pair_id};
     echo "Dump finished";
+    ls -la;
+    df -h;
     pigz -p 16 ${pair_id}_1.fastq ;
     pigz -p 16 ${pair_id}_2.fastq ;
     echo "Compression finished";
@@ -100,7 +104,9 @@ process Map {
 
     publishDir "${params.outdir}", mode: "copy"
     cpus 16
-    memory '100 GB'
+    memory '64 GB'
+    queue 'jy-scvh-queue-r5a8x-1'
+
 
     input:
     file result from results_ch_dump
@@ -143,7 +149,10 @@ process Map {
 process Filter {
     publishDir "${params.outdir}", mode: "copy",overwrite: true
     errorStrategy 'retry'
-    maxRetries 3
+    maxRetries 2
+    
+    queue 'jy-scvh-queue-r5a4x-1'
+
 
     cpus 4
     memory '16 GB'
@@ -167,10 +176,13 @@ process Filter {
  */
 process Analysis {
     publishDir "${params.outdir}", mode: "copy",overwrite: true
+    
+    queue 'jy-scvh-queue-r5a4x-1'
+
     cpus 4
     memory '16 GB'
     errorStrategy 'ignore'
-    maxRetries 3
+    maxRetries 2
     input:
     file result from results_ch_fil
     val pair_id from id_ch_fil
@@ -180,8 +192,12 @@ process Analysis {
     
     shell
     """
-    ls
-    echo "Analysis bam in the output dir ${pair_id}"
-    perl ${params.codebase}/scvh_analyze_bam.pl "${pair_id}"
+    if [ -e "${pair_id}/filtered_matrix_viral_barcodes_info.txt" -a -e "${pair_id}/filtered_matrix_viral_genes_info.txt" ]; then
+        echo "Analysis bam in the output dir ${pair_id}"
+        perl ${params.codebase}/scvh_analyze_bam.pl "${pair_id}"
+
+    else
+        echo "Cannot find virus in the sample"
+    fi
     """
 }
