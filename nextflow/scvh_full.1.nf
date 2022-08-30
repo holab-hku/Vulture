@@ -22,6 +22,7 @@ params.outSAMtype = "BAM SortedByCoordinate";
 params.soloInputSAMattrBarcodeSeq = "CR UR";
 params.soloInputSAMattrBarcodeQual = "-";
 params.barcodes_whitelist = "737K-august-2016.txt"
+params.inputformat = "fastq"
 
 
 log.info """\
@@ -69,15 +70,25 @@ process Dump {
     set file('*_1.fastq.gz'), file('*_2.fastq.gz') into results3_ch
     val pair_id into id_ch3
 
-    shell
-    """
-    echo "Start to dump fastq files from .sra files: ${pair_id}";
-    fasterq-dump --split-files -v -e ${params.dumpT} ${pair_id};
-    echo "Dump finished";
-    pigz -p 16 ${pair_id}_1.fastq ;
-    pigz -p 16 ${pair_id}_2.fastq ;
-    echo "Compression finished";
-    """
+    if( params.inputformat == 'fastq' )
+        """
+        echo "Start to dump fastq files from .sra files: ${pair_id}";
+        fasterq-dump --split-files -v -e ${params.dumpT} ${pair_id};
+        echo "Dump finished";
+        pigz -p 16 ${pair_id}_1.fastq ;
+        pigz -p 16 ${pair_id}_2.fastq ;
+        echo "Compression finished";
+        """
+    else if( params.inputformat == 'bam' )
+        """
+        echo "Start to dump fastq files from .sra files: ${pair_id}";
+        fasterq-dump --split-files -v -e ${params.dumpT} ${pair_id};
+        echo "Dump finished";
+        pigz -p 16 ${pair_id}_1.fastq ;
+        pigz -p 16 ${pair_id}_2.fastq ;
+        echo "Compression finished";
+        """
+
 }
     
 /*
@@ -96,39 +107,49 @@ process Map {
     output:
     set file("intermediate_files/"), file('alignment_outs/') into results4_ch
     
-    shell
-    // """
-
-    // ls -l ref
-    // cd ref 
-    // ls .
-    // cd ../
-    // perl ${params.codebase}/scvh_map_reads.pl -f GeneFull -t 24 -r 128 -d "viruSITE" -a "STAR" -o "." -ot "BAM Unsorted" \
-    // "${ref}" \
-    // "${params.baseDir}/${pair_id}_2.fastq.gz" "${params.baseDir}/${pair_id}_1.fastq.gz"
-
-    // """
-    """
-    perl ${params.codebase}/scvh_map_reads.pl \
-    --output-dir "." \
-    --threads ${params.threads} \
-    --ram ${params.ram} \
-    --database ${params.virus_database} \
-    --soloStrand ${params.soloStrand} \
-    --whitelist "${ref}/${params.barcodes_whitelist}" \
-    --alignment ${params.alignment} \
-    --technology ${params.technology} \
-    --soloFeature ${params.soloFeatures} \
-    --soloMultiMappers ${params.soloMultiMappers} \
-    --pseudoBAM ${params.pseudoBAM} \
-    --soloCBlen ${params.soloCBlen} \
-    --soloCBstart ${params.soloCBstart} \
-    --soloUMIstart ${params.soloUMIstart} \
-    --soloUMIlen ${params.soloUMIlen} \
-    "${ref}" \
-    "${params.baseDir}/${pair_id}_2.fastq.gz" \
-    "${params.baseDir}/${pair_id}_1.fastq.gz";
-    """
+    if( params.inputformat == 'fastq' )
+        """
+        perl ${params.codebase}/scvh_map_reads.pl \
+        --output-dir "." \
+        --threads ${params.threads} \
+        --ram ${params.ram} \
+        --database ${params.virus_database} \
+        --soloStrand ${params.soloStrand} \
+        --whitelist "${ref}/${params.barcodes_whitelist}" \
+        --alignment ${params.alignment} \
+        --technology ${params.technology} \
+        --soloFeature ${params.soloFeatures} \
+        --soloMultiMappers ${params.soloMultiMappers} \
+        --pseudoBAM ${params.pseudoBAM} \
+        --soloCBlen ${params.soloCBlen} \
+        --soloCBstart ${params.soloCBstart} \
+        --soloUMIstart ${params.soloUMIstart} \
+        --soloUMIlen ${params.soloUMIlen} \
+        "${ref}" \
+        "${params.baseDir}/${pair_id}_2.fastq.gz" \
+        "${params.baseDir}/${pair_id}_1.fastq.gz";
+        """
+    if( params.inputformat == 'bam' )
+        """
+        perl ${params.codebase}/scvh_map_reads.pl \
+        --output-dir "." \
+        --threads ${params.threads} \
+        --ram ${params.ram} \
+        --database ${params.virus_database} \
+        --soloStrand ${params.soloStrand} \
+        --whitelist "${ref}/${params.barcodes_whitelist}" \
+        --alignment ${params.alignment} \
+        --technology ${params.technology} \
+        --soloFeature ${params.soloFeatures} \
+        --soloMultiMappers ${params.soloMultiMappers} \
+        --pseudoBAM ${params.pseudoBAM} \
+        --soloCBlen ${params.soloCBlen} \
+        --soloCBstart ${params.soloCBstart} \
+        --soloUMIstart ${params.soloUMIstart} \
+        --soloUMIlen ${params.soloUMIlen} \
+        "${ref}" \
+        "${params.baseDir}/${pair_id}.bam";
+        """
 }
 /*
  * 5. Filter

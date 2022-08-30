@@ -83,24 +83,46 @@ process Dump {
     input:
     val pair_id from read_pairs_ch
     output:
-    set file('*_1.fastq.gz'), file('*_2.fastq.gz') into results_ch_dump
+    set file('*_1.fastq.gz'), file('*_2.fastq.gz'), file('*.bam') into results_ch_dump
     val pair_id into id_ch_dump
 
-    shell
-    """
-    echo "Start to prefetch fastq files from .sra files: ${pair_id}";
-    prefetch --max-size u ${pair_id};
-    echo "Start to dump fastq files from .sra files: ${pair_id}";
-    ls -la;
-    df -h;
-    fasterq-dump --split-files --include-technical -e ${params.dumpT} ${pair_id};
-    echo "Dump finished";
-    ls -la;
-    df -h;
-    pigz -p 16 ${pair_id}_1.fastq ;
-    pigz -p 16 ${pair_id}_2.fastq ;
-    echo "Compression finished";
-    """
+    script:
+    if (params.inputformat == "fastq")
+        """
+        echo "Start to prefetch fastq files from .sra files: ${pair_id}";
+        prefetch --max-size u ${pair_id};
+        echo "Start to dump fastq files from .sra files: ${pair_id}";
+        ls -la;
+        df -h;
+        fasterq-dump --split-files --include-technical -e ${params.dumpT} ${pair_id};
+        echo "Dump finished";
+        ls -la;
+        df -h;
+        pigz -p 16 ${pair_id}_1.fastq ;
+        pigz -p 16 ${pair_id}_2.fastq ;
+        echo "Compression finished";
+        touch ${pair_id}.bam;
+        ls -la;
+        """
+    else if (params.inputformat == "bam")
+        """
+        echo "Start to prefetch fastq files from .sra files: ${pair_id}";
+        prefetch --max-size u ${pair_id};
+        echo "Start to dump fastq files from .sra files: ${pair_id}";
+        ls -la;
+        df -h;
+        sam-dump ${pair_id} | samtools view -bS - > ${pair_id}.bam;
+        echo "Dump finished";
+        ls -la;
+        df -h;
+        pigz -p 16 ${pair_id}_1.fastq ;
+        pigz -p 16 ${pair_id}_2.fastq ;
+        echo "Compression finished";
+        touch ${pair_id}_1.fastq.gz;
+        touch ${pair_id}_2.fastq.gz;
+        ls -la;
+        """
+
 }
     
 /*
@@ -122,32 +144,59 @@ process Map {
     file("${pair_id}/") into results_ch_map
     val pair_id into id_ch_map
     
-    shell
-    """
-    echo "Make output dir ${pair_id}"
-    mkdir ${pair_id}
-    ls
-    echo "Alignment ${pair_id}"
-    perl ${params.codebase}/scvh_map_reads.pl \
-    --output-dir "${pair_id}" \
-    --threads ${params.threads} \
-    --ram ${params.ram} \
-    --database ${params.virus_database} \
-    --soloStrand ${params.soloStrand} \
-    --whitelist "${ref}/${params.barcodes_whitelist}" \
-    --alignment ${params.alignment} \
-    --technology ${params.technology} \
-    --soloFeature ${params.soloFeatures} \
-    --soloMultiMappers ${params.soloMultiMappers} \
-    --pseudoBAM ${params.pseudoBAM} \
-    --soloCBlen ${params.soloCBlen} \
-    --soloCBstart ${params.soloCBstart} \
-    --soloUMIstart ${params.soloUMIstart} \
-    --soloUMIlen ${params.soloUMIlen} \
-    "${ref}" \
-    "${params.baseDir}/${pair_id}_2.fastq.gz" \
-    "${params.baseDir}/${pair_id}_1.fastq.gz";
-    """
+    script:
+    if (params.inputformat == "fastq")
+        """
+        echo "Make output dir ${pair_id}"
+        mkdir ${pair_id}
+        ls
+        echo "Alignment ${pair_id}"
+        perl ${params.codebase}/scvh_map_reads.pl \
+        --output-dir "${pair_id}" \
+        --threads ${params.threads} \
+        --ram ${params.ram} \
+        --database ${params.virus_database} \
+        --soloStrand ${params.soloStrand} \
+        --whitelist "${ref}/${params.barcodes_whitelist}" \
+        --alignment ${params.alignment} \
+        --technology ${params.technology} \
+        --soloFeature ${params.soloFeatures} \
+        --soloMultiMappers ${params.soloMultiMappers} \
+        --pseudoBAM ${params.pseudoBAM} \
+        --soloCBlen ${params.soloCBlen} \
+        --soloCBstart ${params.soloCBstart} \
+        --soloUMIstart ${params.soloUMIstart} \
+        --soloUMIlen ${params.soloUMIlen} \
+        "${ref}" \
+        "${params.baseDir}/${pair_id}_2.fastq.gz" \
+        "${params.baseDir}/${pair_id}_1.fastq.gz";
+        """
+    else if (params.inputformat == "bam")
+        """
+        echo "Make output dir ${pair_id}"
+        mkdir ${pair_id}
+        ls
+        echo "Alignment ${pair_id}"
+        perl ${params.codebase}/scvh_map_reads.pl \
+        --output-dir "${pair_id}" \
+        --threads ${params.threads} \
+        --ram ${params.ram} \
+        --database ${params.virus_database} \
+        --soloStrand ${params.soloStrand} \
+        --whitelist "${ref}/${params.barcodes_whitelist}" \
+        --alignment ${params.alignment} \
+        --technology ${params.technology} \
+        --soloFeature ${params.soloFeatures} \
+        --soloMultiMappers ${params.soloMultiMappers} \
+        --pseudoBAM ${params.pseudoBAM} \
+        --soloCBlen ${params.soloCBlen} \
+        --soloCBstart ${params.soloCBstart} \
+        --soloUMIstart ${params.soloUMIstart} \
+        --soloUMIlen ${params.soloUMIlen} \
+        "${ref}" \
+        "${params.baseDir}/${pair_id}.bam"        
+        """
+
 }
 /*
  * 3. Filter
