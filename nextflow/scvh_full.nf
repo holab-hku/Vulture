@@ -17,6 +17,8 @@ params.outSAMtype = "BAM SortedByCoordinate";
 params.soloInputSAMattrBarcodeSeq = "CR UR";
 params.soloInputSAMattrBarcodeQual = "-";
 params.technology = "10XV2";
+params.inputformat = "fastq";
+
 if(params.technology == "10XV2"){
     params.soloCBlen = 16;
     params.soloCBstart = 1;
@@ -86,8 +88,12 @@ process Dump {
 
     shell
     """
+    echo "Start to prefetch fastq files from .sra files: ${pair_id}";
+    prefetch --max-size u ${pair_id};
     echo "Start to dump fastq files from .sra files: ${pair_id}";
-    fasterq-dump --split-files -e ${params.dumpT} ${pair_id};
+    ls -la;
+    df -h;
+    fasterq-dump --split-files --include-technical -e ${params.dumpT} ${pair_id};
     echo "Dump finished";
     ls -la;
     df -h;
