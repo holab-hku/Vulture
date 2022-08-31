@@ -115,8 +115,6 @@ process Dump {
         echo "Dump finished";
         ls -la;
         df -h;
-        pigz -p 16 ${pair_id}_1.fastq ;
-        pigz -p 16 ${pair_id}_2.fastq ;
         echo "Compression finished";
         touch ${pair_id}_1.fastq.gz;
         touch ${pair_id}_2.fastq.gz;
