@@ -63,7 +63,7 @@ def get_url(run,formats=FORMATS):
             s3_address.append(url)
             https_url = url.replace("s3://","https://")
             https_url = https_url.replace("/SRR", ".s3.amazonaws.com/SRR")
-            https_address.append(s3_url)
+            https_address.append(https_url)
 
 
     df_result = pd.DataFrame({"s3":s3_address,"http":https_address})
@@ -73,7 +73,11 @@ def get_url(run,formats=FORMATS):
 
 def run_main(args):
 
-    runs = args.runs
+    if(args.meta==""):
+        runs = args.run
+    else:
+        df_meta=pd.read_csv(args.meta,sep=",")
+        runs = list(df_meta[args.runcol].values)
 
     df_result = []
     for r in runs:
@@ -89,9 +93,11 @@ def run_main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert SRR to a set of down load address.')
-    parser.add_argument('--runs', nargs='+',default=["SRR10211551","SRR10211552"], type=str)
-    parser.add_argument('--outpath', '-o',default="./",  type=str,  help='An output folder')
-    parser.add_argument('--sleep', '-s',  type=int,default=2,  help='Sleeping time for each query')
+    parser.add_argument('--meta',default="", type=str,help="Input the Metadata.txt of SRA run selector and extrace all SRR run S3 location")
+    parser.add_argument('--runcol',default="Run", type=str,help="The column to indeicate the SRR number in the Meta.txt, applicable only if --meta is provided")
+    parser.add_argument('--runs', nargs='+',default=["SRR10211551","SRR10211552"], type=str,help='SRR number of query, seperated by a space')
+    parser.add_argument('--outpath', '-o',default="./",  type=str,  help='Path of the output csv')
+    parser.add_argument('--sleep', '-s',  type=int,default=1,  help='Sleeping time for each query')
 
     args, unknown = parser.parse_known_args()
     run_main(args)
