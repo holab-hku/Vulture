@@ -44,7 +44,9 @@ GetOptions(
 	'soloCBstart=i' => \$soloCBstart,
 	'soloCBlen=i' => \$soloCBlen,
 	'soloUMIstart=i' => \$soloUMIstart,
-	'soloUMIlen=i' => \$soloUMIlen
+	'soloUMIlen=i' => \$soloUMIlen,
+	'soloInputSAMattrBarcodeSeq=s' => \$soloInputSAMattrBarcodeSeq
+
 
 ) or die_usage();
 
@@ -95,6 +97,9 @@ Options:                                                                        
 --soloCBlen <string>  STARsolo param:  See --soloCBlen in STARsolo manual                                                                [<$soloCBlen>]
 --soloUMIstart <string>  STARsolo param:  See --soloUMIstart in STARsolo manual                                                          [<$soloUMIstart>]
 --soloUMIlen <string>  STARsolo param:  See --soloUMIlen in STARsolo manual                                                              [<$soloUMIlen>]
+--soloInputSAMattrBarcodeSeq <string>  STARsolo param:  See --soloInputSAMattrBarcodeSeq in STARsolo manual                              [<$soloInputSAMattrBarcodeSeq>]
+
+
 ";
 }
 
