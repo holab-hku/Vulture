@@ -16,7 +16,7 @@ RUN apt-get update --fix-missing && \
     apt-get install -y wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 curl grep sed dpkg libcurl4-openssl-dev libssl-dev libhdf5-dev \
     git mercurial subversion procps \
-    libxml-libxml-perl pigz awscli uuid-runtime time
+    libxml-libxml-perl pigz awscli uuid-runtime time tini
 
 RUN Rscript /code/r/scvh_dependencies.r
 
@@ -40,11 +40,11 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_6
     echo "conda activate base" >> ~/.bashrc && \
     echo "umask 000" >> ~/.bashrc && \
     echo "ulimit -n 4096" >> ~/.bashrc && \
-    apt-get install -y curl grep sed dpkg && \
-    TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
-    curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
-    dpkg -i tini.deb && \
-    rm tini.deb && \
+    # apt-get install -y curl grep sed dpkg && \
+    # TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
+    # curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
+    # dpkg -i tini.deb && \
+    # rm tini.deb && \
     apt-get clean && \
     pip install kb-python umi_tools velocyto scvelo boto3 awscli leidenalg bbknn && \
     wget https://github.com/alexdobin/STAR/archive/2.7.9a.tar.gz && \

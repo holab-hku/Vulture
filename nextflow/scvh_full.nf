@@ -165,6 +165,7 @@ process Map {
         --soloCBstart ${params.soloCBstart} \
         --soloUMIstart ${params.soloUMIstart} \
         --soloUMIlen ${params.soloUMIlen} \
+        --soloInputSAMattrBarcodeSeq "${params.soloInputSAMattrBarcodeSeq}" \
         "${ref}" \
         "${params.baseDir}/${pair_id}_2.fastq.gz" \
         "${params.baseDir}/${pair_id}_1.fastq.gz";
@@ -191,6 +192,7 @@ process Map {
         --soloCBstart ${params.soloCBstart} \
         --soloUMIstart ${params.soloUMIstart} \
         --soloUMIlen ${params.soloUMIlen} \
+        --soloInputSAMattrBarcodeSeq "${params.soloInputSAMattrBarcodeSeq}" \
         "${ref}" \
         "${params.baseDir}/${pair_id}.bam"        
         """
