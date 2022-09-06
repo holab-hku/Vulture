@@ -18,6 +18,9 @@ params.soloInputSAMattrBarcodeSeq = "CR UR";
 params.soloInputSAMattrBarcodeQual = "-";
 params.technology = "10XV2";
 params.inputformat = "fastq";
+params.sampleSubfix1 = "_1";
+params.sampleSubfix2 = "_2";
+
 
 if(params.technology == "10XV2"){
     params.soloCBlen = 16;
@@ -98,8 +101,8 @@ process Dump {
         echo "Dump finished";
         ls -la;
         df -h;
-        pigz -p 16 ${pair_id}_1.fastq ;
-        pigz -p 16 ${pair_id}_2.fastq ;
+        pigz -p 16 ${pair_id}${params.sampleSubfix1}.fastq ;
+        pigz -p 16 ${pair_id}${params.sampleSubfix2}.fastq ;
         echo "Compression finished";
         touch ${pair_id}.bam;
         ls -la;
@@ -116,8 +119,8 @@ process Dump {
         ls -la;
         df -h;
         echo "Compression finished";
-        touch ${pair_id}_1.fastq.gz;
-        touch ${pair_id}_2.fastq.gz;
+        touch ${pair_id}${params.sampleSubfix1}.fastq.gz;
+        touch ${pair_id}${params.sampleSubfix2}.fastq.gz;
         ls -la;
         """
 
@@ -167,8 +170,8 @@ process Map {
         --soloUMIlen ${params.soloUMIlen} \
         --soloInputSAMattrBarcodeSeq "${params.soloInputSAMattrBarcodeSeq}" \
         "${ref}" \
-        "${params.baseDir}/${pair_id}_2.fastq.gz" \
-        "${params.baseDir}/${pair_id}_1.fastq.gz";
+        "${params.baseDir}/${pair_id}${params.sampleSubfix2}.fastq.gz" \
+        "${params.baseDir}/${pair_id}${params.sampleSubfix1}.fastq.gz";
         """
     else if (params.inputformat == "bam")
         """
@@ -182,7 +185,7 @@ process Map {
         --ram ${params.ram} \
         --database ${params.virus_database} \
         --soloStrand ${params.soloStrand} \
-        --whitelist "${ref}/${params.barcodes_whitelist}" \
+        --whitelist "-" \
         --alignment ${params.alignment} \
         --technology ${params.technology} \
         --soloFeature ${params.soloFeatures} \
@@ -203,7 +206,7 @@ process Map {
  */
 process Filter {
     publishDir "${params.outdir}", mode: "copy",overwrite: true
-    errorStrategy 'retry'
+    errorStrategy 'ignore'
     maxRetries 2
     
     queue 'jy-scvh-queue-r5a4x-1'
