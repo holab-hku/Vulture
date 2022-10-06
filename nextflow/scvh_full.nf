@@ -14,12 +14,14 @@ params.pseudoBAM = "";
 params.soloMultiMappers = "EM";
 params.soloFeatures = "GeneFull";
 params.outSAMtype = "BAM SortedByCoordinate";
-params.soloInputSAMattrBarcodeSeq = "CR UR";
 params.soloInputSAMattrBarcodeQual = "-";
 params.technology = "10XV2";
 params.inputformat = "fastq";
 params.sampleSubfix1 = "_1";
 params.sampleSubfix2 = "_2";
+params.barcode = "CR";
+params.umi = "UR";
+params.soloInputSAMattrBarcodeSeq = "${params.barcode} ${params.umi}";
 
 
 if(params.technology == "10XV2"){
@@ -84,7 +86,7 @@ Channel
 process Dump {
     cpus 16
     memory '16 GB'
-    queue 'jy-scvh-queue-r5a4x-1'
+    queue "${params.downloadqueue}"
     errorStrategy 'ignore'
 
     input:
@@ -137,7 +139,7 @@ process Map {
     publishDir "${params.outdir}", mode: "copy"
     cpus 16
     memory '64 GB'
-    queue 'jy-scvh-queue-r5a8x-1'
+    queue "${params.mapqueue}"
 
     input:
     file result from results_ch_dump
@@ -180,14 +182,15 @@ process Map {
         echo "Make output dir ${pair_id}"
         mkdir ${pair_id}
         ls -la
-        echo "Alignment ${pair_id}"
+        echo "Filter BAM ${pair_id}"
+        samtools view -d ${params.barcode} -o "${params.baseDir}/${pair_id}_filtered.bam" "${params.baseDir}/${pair_id}.bam"
         perl ${params.codebase}/scvh_map_reads.pl \
         --output-dir "${pair_id}" \
         --threads ${params.threads} \
         --ram ${params.ram} \
         --database ${params.virus_database} \
         --soloStrand ${params.soloStrand} \
-        --whitelist "-" \
+        --whitelist None \
         --alignment ${params.alignment} \
         --technology ${params.technology} \
         --soloFeature ${params.soloFeatures} \
@@ -199,7 +202,7 @@ process Map {
         --soloUMIlen ${params.soloUMIlen} \
         --soloInputSAMattrBarcodeSeq "${params.soloInputSAMattrBarcodeSeq}" \
         "${ref}" \
-        "${params.baseDir}/${pair_id}.bam"        
+        "${params.baseDir}/${pair_id}_filtered.bam"        
         """
 
 }

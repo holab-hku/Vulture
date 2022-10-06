@@ -314,7 +314,7 @@ sub run_STAR {
 	
 	if(index($ARGV[1], ".bam")>0){
 
-		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --readFilesType SAM SE --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --soloInputSAMattrBarcodeSeq $soloInputSAMattrBarcodeSeq --soloInputSAMattrBarcodeQual $soloInputSAMattrBarcodeQual --readFilesIn $R2";
+		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --readFilesType SAM SE --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --soloInputSAMattrBarcodeSeq $soloInputSAMattrBarcodeSeq --soloInputSAMattrBarcodeQual $soloInputSAMattrBarcodeQual --readFilesIn $R2";
 		system("$run_STAR");
 
 

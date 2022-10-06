@@ -21,6 +21,7 @@ params.inputformat = "fastq";
 params.sampleSubfix1 = "_1";
 params.sampleSubfix2 = "_2";
 
+
 if(params.technology == "10XV2"){
     params.soloCBlen = 16;
     params.soloCBstart = 1;
@@ -40,6 +41,7 @@ if(params.technology == "10XV2"){
     params.soloUMIlen = 10;
     params.barcodes_whitelist = "737K-august-2016.txt"
 }
+
 
 
 log.info """\
@@ -71,11 +73,62 @@ log.info """\
 
 
 Channel
-    .fromFilePairs( params.reads )
+    .fromList( params.reads )
     .ifEmpty { error "Cannot find any reads matching: ${params.reads}" }
     .view()
     .set { read_pairs_ch }
 
+/*
+ * 1. Dump
+ */
+process Dump {
+    cpus 16
+    memory '16 GB'
+    queue 'jy-scvh-queue-r5a4x-1'
+    errorStrategy 'ignore'
+
+    input:
+    val pair_id from read_pairs_ch
+    output:
+    set file("*${params.sampleSubfix1}.fastq.gz"), file("*${params.sampleSubfix2}.fastq.gz"), file('*.bam') into results_ch_dump
+    val pair_id into id_ch_dump
+
+    script:
+    if (params.inputformat == "fastq")
+        """
+        echo "Start to prefetch fastq files from .sra files: ${pair_id}";
+        prefetch --max-size u ${pair_id};
+        echo "Start to dump fastq files from .sra files: ${pair_id}";
+        ls -la;
+        df -h;
+        fasterq-dump --split-files --include-technical -e ${params.dumpT} ${pair_id};
+        echo "Dump finished";
+        ls -la;
+        df -h;
+        pigz -p 16 "${pair_id}${params.sampleSubfix1}.fastq" ;
+        pigz -p 16 "${pair_id}${params.sampleSubfix2}.fastq" ;
+        echo "Compression finished";
+        touch "${pair_id}.bam";
+        ls -la;
+        """
+    else if (params.inputformat == "bam")
+        """
+        echo "Start to prefetch fastq files from .sra files: ${pair_id}";
+        prefetch --max-size u ${pair_id};
+        echo "Start to dump fastq files from .sra files: ${pair_id}";
+        ls -la;
+        df -h;
+        sam-dump ${pair_id} | samtools view -bS - > ${pair_id}.bam;
+        echo "Dump finished";
+        ls -la;
+        df -h;
+        echo "Compression finished";
+        touch "${pair_id}${params.sampleSubfix1}.fastq.gz";
+        touch "${pair_id}${params.sampleSubfix2}.fastq.gz";
+        ls -la;
+        """
+}
+    
 /*
  * 2. Mapping 
  */
@@ -87,7 +140,8 @@ process Map {
     queue 'jy-scvh-queue-r5a8x-1'
 
     input:
-    tuple val(pair_id), file(reads) from read_pairs_ch
+    file result from results_ch_dump
+    val pair_id from id_ch_dump
     path ref from params.ref
     output:
     file("${pair_id}/") into results_ch_map
@@ -97,9 +151,6 @@ process Map {
     if (params.inputformat == "fastq")
         """
         echo "Make output dir ${pair_id}"
-        echo "${params.baseDir}/${pair_id}${params.sampleSubfix2}.fastq.gz"
-        echo "${params.baseDir}/${pair_id}${params.sampleSubfix1}.fastq.gz"
-
         mkdir ${pair_id}
         ls -la
         echo "Alignment ${pair_id}"
@@ -150,6 +201,7 @@ process Map {
         "${ref}" \
         "${params.baseDir}/${pair_id}.bam"        
         """
+
 }
 /*
  * 3. Filter
