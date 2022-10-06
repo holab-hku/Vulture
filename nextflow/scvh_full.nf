@@ -22,8 +22,8 @@ params.sampleSubfix2 = "_2";
 params.barcode = "CR";
 params.umi = "UR";
 params.soloInputSAMattrBarcodeSeq = "${params.barcode} ${params.umi}";
-params.mapqueue = "jy-scvh-queue-optimal"
-params.downloadqueue = "jy-scvh-queue-r5a8x-1"
+params.mapqueue = "jy-scvh-queue-r5a8x-1"
+params.downloadqueue = "jy-scvh-queue-optimal"
 
 
 if(params.technology == "10XV2"){
