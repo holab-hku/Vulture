@@ -6,7 +6,7 @@ params.baseDir = ".";
 params.codebase = "/code";
 params.threads = 16;
 params.virus_database = "viruSITE";
-params.output = "human_host_viruses_reference_set";
+params.output = "result";
 
 
 
@@ -26,7 +26,7 @@ log.info """\
  */
 process Download {
 
-    publishDir "./${params.outdir}", mode: "copy",overwrite: true
+    publishDir "${params.outdir}", mode: "copy",overwrite: true
     cpus 16
     memory '64 GB'
 
