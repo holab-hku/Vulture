@@ -39,8 +39,10 @@ process Download {
     script:
         """
         ls -la
+        mkdir ${params.output};
+        ls -la
         perl ${params.codebase}/virusl_et.pl \
-        -o "./${params.output}" \
+        -o "${params.output}" \
         --human_fa "${ref}/${params.humanfa}" \
         --human_gtf "${ref}/${params.humagtf}" \
         --viruSITE "${ref}/${params.viruSITE}" \
