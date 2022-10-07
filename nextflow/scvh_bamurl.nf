@@ -127,7 +127,7 @@ process Map {
     mkdir ${pair_id}
     ls -la
     echo "Filter BAM ${pair_id}"
-    samtools view -e "[${params.barcode}] && [${params.umi}]" -o "${params.baseDir}/${pair_id}_filtered.bam" "${params.baseDir}/${pair_id}.bam"
+    samtools view -@ 12 -e "[${params.barcode}] && [${params.umi}]" -o "${params.baseDir}/${pair_id}_filtered.bam" "${params.baseDir}/${pair_id}.bam"
     perl ${params.codebase}/scvh_map_reads.pl \
     --output-dir "${pair_id}" \
     --threads ${params.threads} \
