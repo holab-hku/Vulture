@@ -6,7 +6,7 @@ params.baseDir = ".";
 params.codebase = "/code";
 params.threads = 16;
 params.virus_database = "viruSITE";
-params.output = "result";
+params.output = "newref";
 
 log.info """\
          S C V H M K R E F- N F   P I P E L I N E
@@ -42,7 +42,8 @@ process Downloadref {
         -o "${params.output}" \
         --human_fa "${ref}/${params.humanfa}" \
         --human_gtf "${ref}/${params.humagtf}" \
-        --viruSITE "${ref}/${params.viruSITE}" \
+        --viruSITE "${ref}/${params.viruSITE}" \ 
+        --output_prefix "${params.virus_database}" \
         --prokaryotes "${ref}/${params.prokaryotes}" ;
         
         echo "Moving files"
