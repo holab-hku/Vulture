@@ -46,8 +46,8 @@ process Downloadref {
         --prokaryotes "${ref}/${params.prokaryotes}" ;
         
         echo "Moving files"
-        mv "${params.output}/human_host_viruses_reference_set/with_hg38/human_host_viruses_microbes.viruSITE.NCBIprokaryotes.with_hg38.fa" "${params.output}/human_host_viruses_microbes.viruSITE.NCBIprokaryotes.with_hg38.fa"
-        mv "${params.output}/human_host_viruses_reference_set/with_hg38/human_host_viruses_microbes.viruSITE.NCBIprokaryotes.with_hg38.removed_amb_viral_exon.gtf" "${params.output}/human_host_viruses_microbes.viruSITE.NCBIprokaryotes.with_hg38.removed_amb_viral_exon.gtf"
+        mv "${params.output}/human_host_viruses_reference_set/with_hg38/human_host_"*".fa" "${params.output}/"
+        mv "${params.output}/human_host_viruses_reference_set/with_hg38/human_host_"*".gtf" "${params.output}/"
 
         echo "Downloading the 10x barcode whitelists"
         wget https://raw.githubusercontent.com/10XGenomics/cellranger/master/lib/python/cellranger/barcodes/translation/3M-february-2018.txt.gz
