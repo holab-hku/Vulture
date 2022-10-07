@@ -134,7 +134,7 @@ process Map {
     --ram ${params.ram} \
     --database ${params.virus_database} \
     --soloStrand ${params.soloStrand} \
-    --whitelist ${params.barcodes_whitelist} \
+    --whitelist "${ref}/${params.barcodes_whitelist}" \
     --alignment ${params.alignment} \
     --technology ${params.technology} \
     --soloFeature ${params.soloFeatures} \
