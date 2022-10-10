@@ -5,8 +5,8 @@
 params.baseDir = ".";
 params.codebase = "/code";
 params.threads = 16;
-params.virus_database = "viruSITE";
-params.output = "result"
+params.virus_database = "viruSITE.NCBIprokaryotes";
+params.output = "newref"
 
 log.info """\
          S C V H M K R E F- N F   P I P E L I N E
@@ -37,7 +37,7 @@ process Downloadref {
         """
         mkdir ${params.output};
         ls -la
-        perl ${params.codebase}/virusl_et.pl -o ${params.output} --human_fa ${ref}/${params.humanfa} --human_gtf ${ref}/${params.humagtf} --viruSITE ${ref}/${params.viruSITE} --prokaryotes ${ref}/${params.prokaryotes};
+        perl ${params.codebase}/virusl_et.pl -o ${params.output} --human_fa ${ref}/${params.humanfa} --human_gtf ${ref}/${params.humagtf} --viruSITE ${ref}/${params.viruSITE} --prokaryotes ${ref}/${params.prokaryotes} --database ${params.virus_database};
         
         mv ${params.output}/human_host_viruses_reference_set/with_hg38/human_host_*.fa ${params.output}/
         mv ${params.output}/human_host_viruses_reference_set/with_hg38/human_host_*.gtf ${params.output}/

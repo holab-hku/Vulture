@@ -11,7 +11,7 @@ my $soloStrand = "Reverse"; #Reverse is used for 10x 5' protocol, while Forward 
 my $genome_dir = "\"vmh_genome_dir\"";
 my $barcodes_whitelist = "$genome_dir/737K-august-2016.txt";
 #definitely needed, can use static version for now, but eventually user should pre-install STAR
-my $ram = 8;
+my $ram = 128;
 my $alignment = "STAR";
 my $technology = "10XV2";
 my $virus_database = "viruSITE.NCBIprokaryotes";
@@ -87,8 +87,8 @@ Options:                                                                        
 -e/--exe <string>          executable command or stand alone executable path of the alignment tool                                       [<$EXE>]
 -s/--soloStrand <string>   STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively                               [<$soloStrand>]
 -w/--whitelist <string>    STARsolo param --soloCBwhitelist                                                                              [<$barcodes_whitelist>]
--r/--ram <int>             limitation of RAM usage. For STARsolo, param: limitGenomeGenerateRAM unit by GB                               [<$ram>]
--f/--soloFeature <string> STARsolo param:  See --soloFeatures in STARsolo manual                                                        [<$soloFeatures>]
+-r/--ram <int>             limitation of RAM usage. For STARsolo, param: limitGenomeGenerateRAM, limitBAMsortRAM unit by GB              [<$ram>]
+-f/--soloFeature <string> STARsolo param:  See --soloFeatures in STARsolo manual                                                         [<$soloFeatures>]
 -ot/--outSAMtype <string>  STARsolo param:  See --outSAMtype in STARsolo manual                                                          [<$outSAMtype>]
 -mm/--soloMultiMappers <string>  STARsolo param:  See --soloMultiMappers in STARsolo manual                                              [<$soloMultiMappers>]
 -a/--alignment <string>    Select alignment methods: 'STAR', 'KB', 'Alevin', or 'CellRanger'                                             [<$alignment>]
@@ -314,12 +314,12 @@ sub run_STAR {
 	
 	if(index($ARGV[1], ".bam")>0){
 
-		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --readFilesType SAM SE --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --soloInputSAMattrBarcodeSeq $soloInputSAMattrBarcodeSeq --soloInputSAMattrBarcodeQual $soloInputSAMattrBarcodeQual --readFilesIn $R2";
+		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --limitBAMsortRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --readFilesType SAM SE --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --soloInputSAMattrBarcodeSeq $soloInputSAMattrBarcodeSeq --soloInputSAMattrBarcodeQual $soloInputSAMattrBarcodeQual --readFilesIn $R2";
 		system("$run_STAR");
 
 
 	}else{
-		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --readFilesIn $R2 $R1";
+		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --limitBAMsortRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --readFilesIn $R2 $R1";
 		system("$run_STAR");
 	}
 	
