@@ -9,21 +9,23 @@ params.virus_database = "viruSITE.NCBIprokaryotes";
 params.output = "newref"
 
 if(params.virus_database == "NCBIprokaryotes"){
-    params.genomeprefix = "microbes.NCBIprokaryotes"
+    params.genomeprefix = "microbes"
 }else if(params.virus_database == "viruSITE"){
-    params.genomeprefix = "viruses.viruSITE"
+    params.genomeprefix = "viruses"
 }else if(params.virus_database == "viruSITE.NCBIprokaryotes"){
-    params.genomeprefix = "viruses_microbes.viruSITE.NCBIprokaryotes"
+    params.genomeprefix = "viruses_microbes"
 }
 
 log.info """\
          S C V H M K R E F- N F   P I P E L I N E
          ===================================
-         transcriptome: ${params.ref}
-         human_fa_file:  ${params.humanfa}
-         human_gtf_file: ${params.humagtf}
-         viruSITE_file:  ${params.viruSITE}
-         prokaryotes_file: ${params.prokaryotes}
+         transcriptome:     ${params.ref}
+         human_fa_file:     ${params.humanfa}
+         human_gtf_file:    ${params.humagtf}
+         viruSITE_file:     ${params.viruSITE}
+         prokaryotes_file:  ${params.prokaryotes}
+         virus_database:    ${params.virus_database}
+         genomeprefix:      ${params.genomeprefix}
          """
          .stripIndent()
 
@@ -45,10 +47,10 @@ process Downloadref {
         """
         mkdir ${params.output};
         ls -la
-        perl ${params.codebase}/virusl_et.pl -o ${params.output} --human_fa ${ref}/${params.humanfa} --human_gtf ${ref}/${params.humagtf} --viruSITE ${ref}/${params.viruSITE} --prokaryotes ${ref}/${params.prokaryotes} --database ${params.virus_database};
+        perl ${params.codebase}/virusl_et.pl -o ${params.output} --human_fa ${ref}/${params.humanfa} --human_gtf ${ref}/${params.humagtf} --viruSITE ${ref}/${params.viruSITE} --prokaryotes ${ref}/${params.prokaryotes} --database ${params.virus_database} --output_prefix ${params.genomeprefix};
         
-        mv ${params.output}/human_host_viruses_reference_set/with_hg38/human_host_${params.genomeprefix}.with_hg38.fa ${params.output}/
-        mv ${params.output}/human_host_viruses_reference_set/with_hg38/human_host_${params.genomeprefix}.with_hg38.removed_amb_viral_exon.gtf ${params.output}/
+        mv ${params.output}/human_host_viruses_reference_set/with_hg38/human_host_${params.genomeprefix}.${params.virus_database}.with_hg38.fa ${params.output}/
+        mv ${params.output}/human_host_viruses_reference_set/with_hg38/human_host_${params.genomeprefix}.${params.virus_database}.with_hg38.removed_amb_viral_exon.gtf ${params.output}/
 
         wget https://raw.githubusercontent.com/10XGenomics/cellranger/master/lib/python/cellranger/barcodes/translation/3M-february-2018.txt.gz
         gunzip -c 3M-february-2018.txt.gz > ${params.output}/3M-february-2018.txt
@@ -71,6 +73,6 @@ process Downloadref {
     
     script:
         """
-        "STAR --runThreadN 10 --runMode genomeGenerate --genomeDir ${ref} --genomeFastaFiles ${ref}/human_host_${params.genomeprefix}.with_hg38.fa"
+        "STAR --runThreadN 10 --runMode genomeGenerate --genomeDir ${ref} --genomeFastaFiles ${ref}/human_host_${params.genomeprefix}.${params.virus_database}.with_hg38.fa"
         """
 }
