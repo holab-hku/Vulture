@@ -6,8 +6,8 @@ params.baseDir = "."
 params.codebase = "/code"
 params.dumpT = 12;
 params.soloStrand = "Forward";
-params.threads = 16;
-params.ram = 64;
+params.threads = 10;
+params.ram = 128;
 params.alignment = "STAR";
 params.virus_database = "viruSITE";
 params.pseudoBAM = "";
@@ -84,8 +84,8 @@ ids.merge(urls)
  * 1. Dump
  */
 process Dump {
-    cpus 16
-    memory '16 GB'
+    cpus 4
+    memory '4 GB'
     queue "${params.downloadqueue}"
     errorStrategy 'ignore'
 
@@ -110,7 +110,7 @@ process Map {
 
     publishDir "${params.outdir}", mode: "copy"
     cpus 16
-    memory '64 GB'
+    memory '128 GB'
     queue "${params.mapqueue}"
 
     input:
@@ -127,7 +127,7 @@ process Map {
     mkdir ${pair_id}
     ls -la
     echo "Filter BAM ${pair_id}"
-    samtools view -@ 12 -e "[${params.barcode}] && [${params.umi}]" -o "${params.baseDir}/${pair_id}_filtered.bam" "${params.baseDir}/${pair_id}.bam"
+    samtools view -@ ${params.threads} -e "[${params.barcode}] && [${params.umi}]" -o "${params.baseDir}/${pair_id}_filtered.bam" "${params.baseDir}/${pair_id}.bam"
     perl ${params.codebase}/scvh_map_reads.pl \
     --output-dir "${pair_id}" \
     --threads ${params.threads} \
