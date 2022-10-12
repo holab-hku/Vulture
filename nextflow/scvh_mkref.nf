@@ -63,7 +63,7 @@ process Downloadref {
  process Mkref {
     container '795465341760.dkr.ecr.us-east-1.amazonaws.com/dev/scvh:latest'
     publishDir "${params.outdir}", mode: "copy",overwrite: true
-    cpus 10
+    cpus 16
     memory '64 GB'
 
     input:
@@ -74,7 +74,8 @@ process Downloadref {
     script:
         """
         ls -la
+        chmod -R 777 ${ref}
         ls -la ${ref}
-        "STAR --runThreadN 10 --runMode genomeGenerate --genomeDir ${ref} --genomeFastaFiles ${ref}/human_host_${params.genomeprefix}.${params.virus_database}.with_hg38.fa"
+        STAR --runThreadN ${params.threads} --runMode genomeGenerate --genomeDir ${ref} --genomeFastaFiles ${ref}/${params.genomeprefix}.${params.virus_database}.with_hg38.fa
         """
 }
