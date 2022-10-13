@@ -186,8 +186,8 @@ process Analysis {
     
     queue 'jy-scvh-queue-r5a4x-1'
 
-    cpus 4
-    memory '16 GB'
+    cpus 10
+    memory '64 GB'
     errorStrategy 'ignore'
     maxRetries 2
     input:
@@ -201,7 +201,7 @@ process Analysis {
     """
     if [ -e "${pair_id}/filtered_matrix_viral_barcodes_info.txt" -a -e "${pair_id}/filtered_matrix_viral_genes_info.txt" ]; then
         echo "Analysis bam in the output dir ${pair_id}"
-        perl ${params.codebase}/scvh_analyze_bam.pl "${pair_id}"
+        perl ${params.codebase}/scvh_analyze_bam.pl "${pair_id}" -t 10
 
     else
         echo "Cannot find virus in the sample"
