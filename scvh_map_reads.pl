@@ -26,6 +26,7 @@ my $soloCBlen = 16;
 my $soloUMIstart = 17;
 my $soloUMIlen = 10;
 my $EXE = "";
+my $readFilesSAMattrKeep = None;
 
 GetOptions(
 	'o|output-dir=s' => \$output_dir,
@@ -45,7 +46,9 @@ GetOptions(
 	'soloCBlen=i' => \$soloCBlen,
 	'soloUMIstart=i' => \$soloUMIstart,
 	'soloUMIlen=i' => \$soloUMIlen,
-	'soloInputSAMattrBarcodeSeq=s' => \$soloInputSAMattrBarcodeSeq
+	'soloInputSAMattrBarcodeSeq=s' => \$soloInputSAMattrBarcodeSeq,
+	'readFilesSAMattrKeep=s' => \$readFilesSAMattrKeep
+
 
 
 ) or die_usage();
@@ -98,8 +101,7 @@ Options:                                                                        
 --soloUMIstart <string>  STARsolo param:  See --soloUMIstart in STARsolo manual                                                          [<$soloUMIstart>]
 --soloUMIlen <string>  STARsolo param:  See --soloUMIlen in STARsolo manual                                                              [<$soloUMIlen>]
 --soloInputSAMattrBarcodeSeq <string>  STARsolo param:  See --soloInputSAMattrBarcodeSeq in STARsolo manual                              [<$soloInputSAMattrBarcodeSeq>]
-
-
+--readFilesSAMattrKeep <string>  STARsolo param:  See --readFilesSAMattrKeep in STARsolo manual                              			 [<$readFilesSAMattrKeep>]
 ";
 }
 
@@ -314,7 +316,7 @@ sub run_STAR {
 	
 	if(index($ARGV[1], ".bam")>0){
 
-		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --limitBAMsortRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --readFilesType SAM SE --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --soloInputSAMattrBarcodeSeq $soloInputSAMattrBarcodeSeq --soloInputSAMattrBarcodeQual $soloInputSAMattrBarcodeQual --readFilesIn $R2";
+		my $run_STAR = "$EXE --runThreadN $threads --genomeDir $genome_dir --limitGenomeGenerateRAM $ram --limitBAMsortRAM $ram --outFilterMultimapNmax $max_multi --outFileNamePrefix $STAR_output_dir --sjdbGTFfile $gtf --readFilesCommand $readFilesCommand --soloCBwhitelist $barcodes_whitelist --readFilesType SAM SE --readFilesSAMattrKeep $readFilesSAMattrKeep --soloType Droplet --soloBarcodeReadLength $soloBarcodeReadLength --soloStrand $soloStrand --soloUMIfiltering $soloUMIfiltering --soloCellFilter $soloCellFilter --soloFeatures $soloFeatures --soloMultiMappers $soloMultiMappers --outSAMtype $outSAMtype --soloCBstart $soloCBstart --soloCBlen $soloCBlen --soloUMIstart $soloUMIstart --soloUMIlen $soloUMIlen --soloCBmatchWLtype 1MM multi pseudocounts --outSAMattributes $outSAMattributes --soloInputSAMattrBarcodeSeq $soloInputSAMattrBarcodeSeq --soloInputSAMattrBarcodeQual $soloInputSAMattrBarcodeQual --readFilesIn $R2";
 		system("$run_STAR");
 
 
