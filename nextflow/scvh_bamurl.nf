@@ -186,7 +186,7 @@ process Analysis {
     
     queue 'jy-scvh-queue-r5a4x-1'
 
-    cpus 10
+    cpus 16
     memory '64 GB'
     errorStrategy 'ignore'
     maxRetries 2
