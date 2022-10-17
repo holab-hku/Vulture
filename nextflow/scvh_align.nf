@@ -79,6 +79,7 @@ process Map {
     cpus 16
     memory '64 GB'
     queue "${params.mapqueue}"
+    container '795465341760.dkr.ecr.us-east-1.amazonaws.com/scvh-v826:test'
 
     input:
     tuple val(pair_id), file(reads) from read_pairs_ch
