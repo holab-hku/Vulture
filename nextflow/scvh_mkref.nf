@@ -62,7 +62,7 @@ process Downloadref {
  */
  process Mkref {
     container '795465341760.dkr.ecr.us-east-1.amazonaws.com/dev/scvh:latest'
-    publishDir "${params.outdir}", mode: "copy",overwrite: true
+    publishDir "${params.outdir}", mode: "copy",overwrite: false
     cpus 16
     memory '64 GB'
 
