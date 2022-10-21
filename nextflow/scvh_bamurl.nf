@@ -87,7 +87,7 @@ process Dump {
     cpus 4
     memory '4 GB'
     queue "${params.downloadqueue}"
-    errorStrategy 'ignore'
+    errorStrategy 'finish'
 
     input:
     tuple val(pair_id), val(url) from read_pairs_ch
@@ -112,6 +112,7 @@ process Map {
     cpus 16
     memory '192 GB'
     queue "${params.mapqueue}"
+    errorStrategy 'finish'
 
     input:
     file result from results_ch_dump
@@ -155,14 +156,12 @@ process Map {
  */
 process Filter {
     publishDir "${params.outdir}", mode: "copy",overwrite: true
-    errorStrategy 'ignore'
+    errorStrategy { task.attempt > 2 ? 'ignore' : 'retry' }
     maxRetries 2
-    
     queue 'jy-scvh-queue-r5a4x-1'
-
-
     cpus 4
     memory '16 GB'
+    
     input:
     file result from results_ch_map
     val pair_id from id_ch_map
@@ -183,12 +182,10 @@ process Filter {
  */
 process Analysis {
     publishDir "${params.outdir}", mode: "copy",overwrite: true
-    
     queue 'jy-scvh-queue-r5a4x-1'
-
     cpus 16
     memory '64 GB'
-    errorStrategy 'ignore'
+    errorStrategy { task.attempt > 2 ? 'ignore' : 'retry' }
     maxRetries 2
     input:
     file result from results_ch_fil
