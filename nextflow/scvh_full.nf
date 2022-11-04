@@ -7,7 +7,7 @@ params.codebase = "/code"
 params.dumpT = 12;
 params.soloStrand = "Forward";
 params.threads = 10;
-params.ram = 128;
+params.ram = 64;
 params.alignment = "STAR";
 params.virus_database = "viruSITE";
 params.pseudoBAM = "";
@@ -139,8 +139,9 @@ process Dump {
 process Map {
 
     publishDir "${params.outdir}", mode: "copy"
-    cpus 10
-    memory '128 GB'
+    cpus 16
+    memory '64 GB'
+    errorStrategy 'ignore'
     queue "${params.mapqueue}"
 
     input:
