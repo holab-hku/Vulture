@@ -4,9 +4,9 @@
  */
 params.baseDir = "."
 params.codebase = "/code"
-params.dumpT = 12;
+params.dumpT = 10;
 params.soloStrand = "Forward";
-params.threads = 16;
+params.threads = 10;
 params.ram = 64;
 params.alignment = "STAR";
 params.virus_database = "viruSITE";
@@ -76,7 +76,7 @@ Channel
 process Map {
 
     publishDir "${params.outdir}/${pair_id}", mode: "copy"
-    cpus 16
+    cpus 10
     memory '64 GB'
     queue "${params.mapqueue}"
     container '795465341760.dkr.ecr.us-east-1.amazonaws.com/scvh-v826:test'
