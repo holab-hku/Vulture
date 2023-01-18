@@ -1,4 +1,4 @@
-# Vulture: Scalable microbial reads calling pipeline on AWS Cloud
+# Vulture: Scalable microbial calling pipeline on AWS Cloud
 
 <p align="center">
   <img width="200"  src="https://github.com/holab-hku/Vulture/blob/cloud-new-junyi/homepage/icon.jpeg">
