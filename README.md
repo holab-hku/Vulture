@@ -12,9 +12,9 @@ Vulture is a scalable cloud-based pipeline that performs microbe calling for sin
 For how to use Vulture, please kindly refer to our hands-on tutorial page at https://juychen.github.io/
 
 ## <a name="require"></a>Requirements
-Input data
+### Input data
 * 10x Chromium scRNA-seq reads
-Software
+### Software dependencies
 * DropletUtils >= v1.10.2
 * STAR >= v2.7.9a or
 * cellranger >= 6.0.0 or
