@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 Ho Lab / Bioinformatics and Digital Health Laboratory / The University of Hong Kong
+Copyright (c) 2023 Ho Lab / Bioinformatics and Digital Health Laboratory / The University of Hong Kong / Laboratory of Data Discovery for Health (D²4H)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
