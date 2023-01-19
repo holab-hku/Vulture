@@ -13,7 +13,7 @@ Vulture is a scalable cloud-based pipeline that performs microbial calling for s
 For the scalable Vulture usage on the AWS cloud, please kindly refer to our hands-on tutorial page at: 
 [Vulture tutorial on the cloud](https://juychen.github.io/)
 
-## <a name="gen_usages"></a>Run Vulture on local machines
+## <a name="run_local"></a>Run Vulture on local machines
 Map 10x scRNA-seq reads to the viral (and microbial) host reference set using STARsolo, CellRanger, Kallisto|bustools, or Salmon|Alevin. 
 
 ## <a name="require"></a>Requirements
@@ -25,6 +25,8 @@ Map 10x scRNA-seq reads to the viral (and microbial) host reference set using ST
 * cellranger >= 6.0.0 or
 * Kallisto|bustools >= 0.25.1 or
 * salmon|alevin >= v1.4.0
+
+## <a name="gen_usage"></a>General usages
 
 ### 0. Prerequiresits to download genome files
 You need to download virus genome, prokaryotes genome, combined genome and virus combined genome in the following link and save them in a folder as "vmh_genome_dir" to be used in the next step.
