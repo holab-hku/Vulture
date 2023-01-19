@@ -38,14 +38,14 @@ You need to download virus genome, prokaryotes genome, combined genome and virus
 Usage: scvh_map_reads.pl [Options] <vmh_genome_dir> <R2> <R1> or <vmh_genome_dir> <.bam file>
 
 Options:                                                                                                                                Defaults
--o/--output-dir	<string>   the output directory                                                                                          [./]
--t/--threads <int>         number of threads to run alignment with                                                                       [<1>]
+-o/--output-dir <string>   the output directory                                                                                          [./]   
+-t/--threads <int>         number of threads to run alignment with                                                                       [<1>]  
 -d/--database <string>     select virus or virus and prokaryotes database, can be 'viruSITE' or 'viruSITE.NCBIprokaryotes'               [<viruSITE.NCBIprokaryotes>]
 -e/--exe <string>          executable command or stand alone executable path of the alignment tool                                       [<>]
 -s/--soloStrand <string>   STARsolo param: Reverse or Forward used for 10x 5' or 3' protocol, respectively                               [<Reverse>]
 -w/--whitelist <string>    STARsolo param --soloCBwhitelist                                                                              [<"vmh_genome_dir"/737K-august-2016.txt>]
--r/--ram <int>             limitation of RAM usage. For STARsolo, param: limitGenomeGenerateRAM unit by GB                               [<8>]
--f/--soloFeature <string> STARsolo param:  See --soloFeatures in STARsolo manual                                                        [<Gene>]
+-r/--ram <int>             limitation of RAM usage. For STARsolo, param: limitGenomeGenerateRAM, limitBAMsortRAM unit by GB              [<128>]
+-f/--soloFeature <string> STARsolo param:  See --soloFeatures in STARsolo manual                                                         [<Gene>]
 -ot/--outSAMtype <string>  STARsolo param:  See --outSAMtype in STARsolo manual                                                          [<BAM SortedByCoordinate>]
 -mm/--soloMultiMappers <string>  STARsolo param:  See --soloMultiMappers in STARsolo manual                                              [<EM>]
 -a/--alignment <string>    Select alignment methods: 'STAR', 'KB', 'Alevin', or 'CellRanger'                                             [<STAR>]
@@ -53,8 +53,8 @@ Options:                                                                        
 --soloCBstart <string>  STARsolo param:  See --soloCBstart in STARsolo manual                                                            [<1>]
 --soloCBlen <string>  STARsolo param:  See --soloCBlen in STARsolo manual                                                                [<16>]
 --soloUMIstart <string>  STARsolo param:  See --soloUMIstart in STARsolo manual                                                          [<17>]
---soloUMIlen <string>  STARsolo param:  See --soloUMIlen in STARsolo manual   
-
+--soloUMIlen <string>  STARsolo param:  See --soloUMIlen in STARsolo manual                                                              [<10>]
+--soloInputSAMattrBarcodeSeq <string>  STARsolo param:  See --soloInputSAMattrBarcodeSeq in STARsolo manual                              [<CR UR>]
 ```
 For fastq file alignment option 'STAR', 'KB', and 'Alevin', run:
 ```sh
