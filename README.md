@@ -1,7 +1,7 @@
 # Vulture: Scalable microbial calling pipeline on AWS Cloud
 
 <p align="center">
-  <img width="250"  src="https://github.com/holab-hku/Vulture/blob/cloud-new-junyi/homepage/vulturelogo.png">
+  <img width="200"  src="https://github.com/holab-hku/Vulture/blob/cloud-new-junyi/homepage/vulturelogo.png">
 </p>
 
 Vulture is a scalable cloud-based pipeline that performs microbe calling for single-cell RNA sequencing data, enabling the meta-analysis of the single-cell host-microbial studies from the AWS Open Data and other public domain. We named our pipeline Vulture because Vultures are a type of bird that fly the highest above the cloud and as a scavenger can defend themselves from harmful pathogens.
@@ -9,7 +9,8 @@ Vulture is a scalable cloud-based pipeline that performs microbe calling for sin
 ![Image](./homepage/vulture_schematic_diagram.png)
 
 ## Run Vlture on the AWS cloud
-For the scalable Vulture usage on the AWS cloud, please kindly refer to our hands-on tutorial page at [Vlture tutorial on the cloud](https://juychen.github.io/)
+For the scalable Vulture usage on the AWS cloud, please kindly refer to our hands-on tutorial page at: 
+[Vlture tutorial on the cloud](https://juychen.github.io/)
 
 ## <a name="gen_usages"></a>Run Vlture on local machines
 Map 10x scRNA-seq reads to the viral (and microbial) host reference set using STARsolo, CellRanger, Kallisto|bustools, or Salmon|Alevin. 
