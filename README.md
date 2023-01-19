@@ -9,11 +9,11 @@ Vulture is a scalable cloud-based pipeline that performs microbial calling for s
 
 ![Image](./homepage/vulture_schematic_diagram.png)
 
-## Run Vlture on the AWS cloud
+## Run Vulture on the AWS cloud
 For the scalable Vulture usage on the AWS cloud, please kindly refer to our hands-on tutorial page at: 
-[Vlture tutorial on the cloud](https://juychen.github.io/)
+[Vulture tutorial on the cloud](https://juychen.github.io/)
 
-## <a name="gen_usages"></a>Run Vlture on local machines
+## <a name="gen_usages"></a>Run Vulture on local machines
 Map 10x scRNA-seq reads to the viral (and microbial) host reference set using STARsolo, CellRanger, Kallisto|bustools, or Salmon|Alevin. 
 
 ## <a name="require"></a>Requirements
