@@ -9,7 +9,7 @@ Vulture is a scalable cloud-based pipeline that performs microbe calling for sin
 ![Image](./homepage/vulture_schematic_diagram.png)
 
 ## Tutorial
-For how to use Vulture, please kindly refer to our hands-on tutorial page at https://juychen.github.io/
+For the Vulture usage on AWS cloud, please kindly refer to our hands-on tutorial page at https://juychen.github.io/
 
 ## <a name="require"></a>Requirements
 ### Input data
@@ -21,12 +21,19 @@ For how to use Vulture, please kindly refer to our hands-on tutorial page at htt
 * Kallisto|bustools >= 0.25.1 or
 * salmon|alevin >= v1.4.0
 
-## <a name="gen_usages"></a>General usage
+## <a name="gen_usages"></a>Run Vlture on local machines
 Map 10x scRNA-seq reads to the viral (and microbial) host reference set using STARsolo, CellRanger, Kallisto|bustools, or Salmon|Alevin. 
+
+### 0. Prerequiresits to download genome files
+You need to download virus genome, prokaryotes genome, combined genome and virus combined genome in the following link and save them in a folder as "vmh_genome_dir" to be used in the next step.
+[human_host_viruses_microbes.viruSITE.NCBIprokaryotes.with_hg38.removed_amb_viral_exon.gtf](https://vulture-reference.s3.ap-east-1.amazonaws.com/human_host_viruses_microbes.viruSITE.NCBIprokaryotes.with_hg38.removed_amb_viral_exon.gtf)
+[human_host_viruses_microbes.viruSITE.NCBIprokaryotes.with_hg38.fa](https://vulture-reference.s3.ap-east-1.amazonaws.com/human_host_viruses_microbes.viruSITE.NCBIprokaryotes.with_hg38.fa)
+[human_host_viruses.viruSITE.with_hg38.removed_amb_viral_exon.gtf](https://vulture-reference.s3.ap-east-1.amazonaws.com/human_host_viruses.viruSITE.with_hg38.removed_amb_viral_exon.gtf)
+[human_host_viruses.viruSITE.with_hg38.fa](https://vulture-reference.s3.ap-east-1.amazonaws.com/human_host_viruses.viruSITE.with_hg38.fa)
 
 ### 1. Map 10x scRNA-seq reads to the viral microbial host reference set:
 
-```
+```sh
 Usage: scvh_map_reads.pl [Options] <vmh_genome_dir> <R2> <R1> or <vmh_genome_dir> <.bam file>
 
 Options:                                                                                                                                Defaults
@@ -45,21 +52,27 @@ Options:                                                                        
 --soloCBstart <string>  STARsolo param:  See --soloCBstart in STARsolo manual                                                            [<1>]
 --soloCBlen <string>  STARsolo param:  See --soloCBlen in STARsolo manual                                                                [<16>]
 --soloUMIstart <string>  STARsolo param:  See --soloUMIstart in STARsolo manual                                                          [<17>]
---soloUMIlen <string>  STARsolo param:  See --soloUMIlen in STARsolo manual                                                              [<10>]
-```
+--soloUMIlen <string>  STARsolo param:  See --soloUMIlen in STARsolo manual   
 
-For alignment option 'STAR', 'KB', and 'Alevin', run:
 ```
+For fastq file alignment option 'STAR', 'KB', and 'Alevin', run:
+```sh
 perl scvh_map_reads.pl -t num_threads -o output_dir vmh_genome_dir R2.fastq.gz R1.fastq.gz
 ```
 where -t is a user-specified integer indicating number of threads to run with, output_dir is a user-specified directory to place the outputs, vmh_genome_dir is a pre-generated viral (and microbial) host (human) reference set directory, R2.fastq.gz and R1.fastq.gz are input 10x scRNA-seq reads.
 
 For option 'CellRanger', run:
 
-```
+```sh
 perl scvh_map_reads.pl -t num_threads -o output_dir vmh_genome_dir sample fastqs
 ```
 where sample and fastqs are two cellranger arguments: --sample and --fastqs. See documentation in [cellranger count](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/count) to infer rules of fastq and sample naming.
+
+For bam files, we only support STARsolo, run:
+
+```sh
+perl scvh_map_reads.pl -t num_threads -o output_dir vmh_genome_dir your_bam_file.bam
+```
 
 ### 2. Filter the mapped UMIs using EmptyDrops to get the viral (and microbial) host filtered UMI counts matrix and also output viral genes and barcodes info files:
 ```
