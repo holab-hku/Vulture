@@ -4,7 +4,8 @@
   <img width="200"  src="https://github.com/holab-hku/Vulture/blob/cloud-new-junyi/homepage/vulturelogo.png">
 </p>
 
-Vulture is a scalable cloud-based pipeline that performs microbe calling for single-cell RNA sequencing data, enabling the meta-analysis of the single-cell host-microbial studies from the AWS Open Data and other public domain. We named our pipeline Vulture because Vultures are a type of bird that fly the highest above the cloud and as a scavenger can defend themselves from harmful pathogens.
+## <a name="intro"></a>Introduction
+Vulture is a scalable cloud-based pipeline that performs microbial calling for single-cell RNA sequencing data, enabling the meta-analysis of the single-cell host-microbial studies from the AWS Open Data and other public domain. We named our pipeline Vulture because Vultures are birds that fly the highest above the 'cloud' and as a scavenger can defend themselves from harmful pathogens.
 
 ![Image](./homepage/vulture_schematic_diagram.png)
 
