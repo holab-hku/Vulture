@@ -15,7 +15,7 @@ COPY . /code
 RUN apt-get update --fix-missing && \
     apt-get install -y wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 curl grep sed dpkg libcurl4-openssl-dev libssl-dev libhdf5-dev \
-    git mercurial subversion procps \
+    git mercurial subversion procps build-essential libc6-dev \
     libxml-libxml-perl pigz awscli uuid-runtime time tini
 
 RUN Rscript /code/r/scvh_dependencies.r
@@ -46,7 +46,12 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_6
     # dpkg -i tini.deb && \
     # rm tini.deb && \
     apt-get clean && \
-    pip install kb-python umi_tools velocyto scvelo boto3 awscli leidenalg bbknn && \
+    wget https://github.com/samtools/htslib/releases/download/1.9/htslib-1.9.tar.bz2 && \
+    tar -vxjf htslib-1.9.tar.bz2 && \
+    cd htslib-1.9 && \
+    make && \
+    cd ../ \
+    pip install kb-python==0.27.3 pysam==0.19.1 umi_tools==1.1.2 velocyto==0.17.17 scvelo==0.2.4 boto3==1.24.91 awscli==1.25.92 leidenalg==0.9.0 bbknn==1.5.1 && \
     wget https://github.com/alexdobin/STAR/archive/2.7.9a.tar.gz && \
     tar -xzf 2.7.9a.tar.gz && \
     echo "export PATH=/STAR-2.7.9a/bin/Linux_x86_64_static:\$PATH" >> ~/.bashrc && \
