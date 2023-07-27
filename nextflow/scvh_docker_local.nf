@@ -72,36 +72,42 @@ log.info """\
          """
          .stripIndent()
 
-url1  = Channel.from(params.read1urls);
-url2  = Channel.from(params.read2urls);
+url1  = Channel.fromPath(params.read1urls,type: 'file' );
+url2  = Channel.fromPath(params.read2urls,type: 'file' );
 ids = Channel.from(params.reads);
 ids.merge(url1).merge(url2)
     .view()
     .set { read_pairs_ch }
-/*
- * 1. Dump
- */
-process Dump {
-    cpus 4
-    memory '4 GB'
-    // queue "${params.downloadqueue}"
-    errorStrategy 'ignore'
+// /*
+//  * 1. Dump
+//  */
+// process Dump {
+//     cpus 4
+//     memory '4 GB'
+//     // queue "${params.downloadqueue}"
+//     errorStrategy 'ignore'
 
-    input:
-    tuple val(pair_id), val(url1), val(url2) from read_pairs_ch
-    output:
-    set file("*${params.sampleSubfix1}.fastq.gz"), file("*${params.sampleSubfix2}.fastq.gz") into results_ch_dump
-    val pair_id into id_ch_dump
+//     input:
+//     tuple val(pair_id), file(url1), file(url2) from read_pairs_ch
+//     path samplepath from params.samplepath
 
-    script:
-    """
-    echo "Copying to prepare fastq files: ${pair_id} as follows";
-    ls -la;
-    cp ${url1} ${pair_id}${params.sampleSubfix1}".fastq.gz";
-    cp ${url2} ${pair_id}${params.sampleSubfix2}".fastq.gz";
-    ls -la;
-    """
-}
+//     output:
+//     set file("*${params.sampleSubfix1}.fastq.gz"), file("*${params.sampleSubfix2}.fastq.gz") into results_ch_dump
+//     val pair_id into id_ch_dump
+
+//     script:
+//     """
+//     echo "Copying to prepare fastq files: ${pair_id} as follows";
+//     ls -la;
+//     cp "${samplepath}/${url1}" ./${pair_id}${params.sampleSubfix1}".fastq.gz";
+//     cp "${samplepath}/${url2}" ./${pair_id}${params.sampleSubfix2}".fastq.gz";
+//     ls -la;
+//     """
+// }
+
+// Channel
+//     .fromFilePairs('/my/data/SRR*_{1,2}.fastq')
+//     .view()
     
 /*
  * 2. Mapping 
@@ -113,10 +119,14 @@ process Map {
     memory '128 GB'
     // queue "${params.mapqueue}"
 
+    // input:
+    // file result from results_ch_dump
+    // val pair_id from id_ch_dump
+    // path ref from params.ref
     input:
-    file result from results_ch_dump
-    val pair_id from id_ch_dump
+    tuple val(pair_id), file(url1), file(url2) from read_pairs_ch
     path ref from params.ref
+
     output:
     file("${pair_id}/") into results_ch_map
     val pair_id into id_ch_map
