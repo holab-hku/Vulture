@@ -116,7 +116,7 @@ process Map {
 
     publishDir "${params.outdir}", mode: "copy"
     cpus 10
-    memory '128 GB'
+    memory '60 GB'
     // queue "${params.mapqueue}"
 
     // input:
