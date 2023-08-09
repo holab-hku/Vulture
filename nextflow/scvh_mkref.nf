@@ -61,7 +61,7 @@ process Downloadref {
  * 2. mkref
  */
  process Mkref {
-    container '795465341760.dkr.ecr.us-east-1.amazonaws.com/dev/scvh:latest'
+    container 'junyichen6/vulture:0.0.1'
     publishDir "${params.outdir}", mode: "copy",overwrite: false
     cpus 16
     memory '64 GB'
